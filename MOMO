@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MOMO 票券管理系統</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        body { font-family: -apple-system, system-ui, sans-serif; background: #F2F2F7; margin: 0; padding-bottom: 50px; }
+        
+        /* 頂部固定顯示區 */
+        #display-zone {
+            position: sticky; top: 0; background: white; z-index: 1000;
+            border-bottom: 1px solid #C6C6C8; padding: 15px; text-align: center;
+            display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+        #img-qr { width: 140px; margin-bottom: 10px; }
+        #img-bar { width: 90%; max-width: 320px; height: 60px; display: block; margin: 0 auto; }
+        .code-box { 
+            background: #F2F2F7; padding: 8px; border-radius: 6px; 
+            font-family: monospace; font-size: 18px; margin: 10px 0; display: inline-block;
+        }
+
+        /* 表格排版 */
+        .container { padding: 10px; }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; }
+        th { background: #E5E5EA; padding: 12px 5px; font-size: 13px; }
+        td { border-bottom: 1px solid #E5E5EA; padding: 12px 8px; font-size: 14px; text-align: center; }
+        .text-left { text-align: left; font-size: 13px; color: #333; }
+        
+        /* 狀態標籤 */
+        .emoji { font-size: 30px; cursor: pointer; -webkit-user-select: none; }
+        .expired { color: #FF3B30; font-weight: bold; }
+        .row-active { background-color: #FFF9C4 !important; }
+        .close-btn { background: #007AFF; color: white; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 600; margin-top: 10px; }
+
+        @media screen and (max-width: 480px) {
+            .hide-mobile { display: none; }
+            td { padding: 10px 4px; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="display-zone">
+    <div id="p-name" style="font-weight:bold; color:#D00278; margin-bottom:10px;"></div>
+    <img id="img-qr" src=""><br>
+    <img id="img-bar" src="">
+    <div id="p-code" class="code-box" onclick="copyText()"></div>
+    <div style="font-size:12px; color:#888;">↑ 點擊序號可複製 ↑</div>
+    <button class="close-btn" onclick="$('#display-zone').slideUp()">關閉視窗</button>
+</div>
+
+<div class="container">
+    <h3 style="margin-left:10px;">🎫 MOMO 票券庫存 (150)</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th class="hide-mobile">到期日</th>
+                <th>品項名稱</th>
+                <th>兌換</th>
+            </tr>
+        </thead>
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MOMO 私人票券庫</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        body { font-family: -apple-system, system-ui, sans-serif; background: #F2F2F7; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        
+        /* 密碼鎖定層 */
+        #lock-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #F2F2F7; z-index: 9999; display: flex; align-items: center; justify-content: center;
+        }
+        .lock-box { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; width: 80%; max-width: 320px; }
+        .lock-box h2 { color: #D00278; margin-bottom: 10px; }
+        input[type="password"] { 
+            width: 90%; padding: 15px; margin: 20px 0; border: 1px solid #DDD; 
+            border-radius: 12px; font-size: 18px; text-align: center; outline: none;
+        }
+        .unlock-btn { 
+            background: #007AFF; color: white; border: none; padding: 15px; 
+            border-radius: 12px; font-weight: 600; font-size: 16px; width: 100%; cursor: pointer;
+        }
+
+        /* 主內容區 */
+        #main-wrapper { display: none; }
+
+        /* 頂部固定顯示區 (iOS 兌換面板) */
+        #display-zone {
+            position: sticky; top: 0; background: rgba(255,255,255,0.95);
+            -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+            z-index: 1000; border-bottom: 1px solid #C6C6C8; padding: 15px; text-align: center;
+            display: none; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        #img-qr { width: 130px; margin-bottom: 5px; }
+        #img-bar { width: 100%; max-width: 320px; height: 60px; display: block; margin: 5px auto; }
+        .code-box { background: #E5E5EA; padding: 8px 15px; border-radius: 8px; font-family: monospace; font-size: 20px; margin: 10px 0; display: inline-block; color: #000; }
+        
+        /* 表格排版 */
+        .container { padding: 10px; }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        th { background: #F8F8F8; padding: 12px 5px; font-size: 12px; color: #8E8E93; text-transform: uppercase; }
+        td { border-bottom: 1px solid #E5E5EA; padding: 12px 8px; font-size: 14px; text-align: center; }
+        .item-info { text-align: left; line-height: 1.4; }
+        .item-name { font-weight: 500; display: block; }
+        .item-date { font-size: 12px; color: #8E8E93; }
+        
+        /* 狀態標記 */
+        .emoji-btn { font-size: 28px; cursor: pointer; text-decoration: none; display: inline-block; }
+        .expired-text { color: #FF3B30; font-weight: bold; }
+        .row-selected { background-color: #FFF9C4 !important; }
+        .close-btn { background: none; border: none; color: #007AFF; font-size: 16px; font-weight: 600; margin-top: 10px; cursor: pointer; }
+
+        @media screen and (max-width: 480px) {
+            .hide-mobile { display: none; }
+            td { padding: 10px 5px; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="lock-screen">
+    <div class="lock-box">
+        <h2>MOMO Wallet</h2>
+        <p style="color:#666;">私人管理系統</p>
+        <input type="password" id="pw-input" placeholder="輸入解鎖密碼" pattern="\d*" inputmode="numeric">
+        <button class="unlock-btn" onclick="unlock()">解鎖</button>
+    </div>
+</div>
+
+<div id="main-wrapper">
+    <div id="display-zone">
+        <div id="p-title" style="font-size:14px; color:#D00278; font-weight:bold; margin-bottom:8px;"></div>
+        <img id="img-qr" src=""><br>
+        <img id="img-bar" src="">
+        <div id="p-code" class="code-box" onclick="copyValue()"></div>
+        <div style="font-size:11px; color:#8E8E93;">點擊序號可複製，給店員掃描長條碼即可</div>
+        <button class="close-btn" onclick="$('#display-zone').slideUp()">關閉</button>
+    </div>
+
+    <div class="container">
+        <h3 style="margin: 15px 0 10px 10px;">總計 150 張票券</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th class="hide-mobile">到期日</th>
+                    <th>品項名稱</th>
+                    <th>管理</th>
+                </tr>
+            </thead>
+            <tbody id="ticket-list">
+                </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+// 設定管理密碼
+const CORRECT_PASS = "2724203";
+
+// 150 筆票券資料
+const data = [
+    { id: 1, date: "2025-08-10", name: "【漢堡王】花生培根脆雞堡組合(過期)", code: "0107158673552685" },
+    { id: 2, date: "2025-08-11", name: "【漢堡王】花生培根脆雞堡組合(過期)", code: "0107158994241846" },
+    { id: 3, date: "2026-01-11", name: "【麥當勞】火腿蛋堡(過期)", code: "MDN9797305442418" },
+    { id: 4, date: "2026-03-12", name: "【85度C】35元飲品(過期)", code: "E1080621081546543300" },
+    { id: 5, date: "2026-03-13", name: "【肯德基】咔啦脆雞(過期)", code: "VKSP8030275092027183" },
+    { id: 6, date: "2026-03-20", name: "【21風味館】烤雞腿(過期)", code: "E206304448" },
+    { id: 7, date: "2026-04-16", name: "【85度C】50元飲品(過期)", code: "E1160436034978871805" },
+    { id: 8, date: "2026-04-26", name: "【85度C】35元飲品(過期)", code: "E1086913617208961724" },
+    { id: 9, date: "2026-05-02", name: "【85度C】35元飲品 (明日到期!)", code: "E1082871022901766866" },
+    { id: 10, date: "2026-05-22", name: "【85度C】55元飲品_0989", code: "E1094572101317370172" },
+    { id: 11, date: "2026-05-22", name: "【85度C】60元飲品_0952", code: "E1228236709909992484" },
+    { id: 12, date: "2026-05-22", name: "【麥當勞】雙層牛肉吉事堡_5452", code: "MDN5696604503948" },
+    { id: 13, date: "2026-05-27", name: "【85度C】50元飲品_0952", code: "E1169692214793275381" },
+    { id: 14, date: "2026-05-27", name: "【85度C】50元飲品_0960", code: "E1169869614536436311" },
+    { id: 15, date: "2026-05-27", name: "【85度C】55元飲品_0909", code: "E1099560174792268366" },
+    { id: 16, date: "2026-05-27", name: "【85度C】65元飲品_0903", code: "E1432684009493791465" },
+    { id: 17, date: "2026-05-27", name: "【麥當勞】漢堡_0989", code: "MDN3331351701013" },
+    { id: 18, date: "2026-05-27", name: "【麥當勞】麥香魚_0935", code: "MDN5168596732232" },
+    { id: 19, date: "2026-05-27", name: "【麥當勞】麥香雞_0989", code: "MDN0736626447792" },
+    { id: 20, date: "2026-05-27", name: "【麥當勞】麥香雞_1829", code: "MDN0702398061980" },
+    { id: 21, date: "2026-06-03", name: "【85度C】35元飲品_0909", code: "E1089714668331207664" },
+    { id: 22, date: "2026-06-03", name: "【85度C】35元飲品_0926", code: "E1085296298069651706" },
+    { id: 23, date: "2026-06-03", name: "【85度C】35元飲品_0966", code: "E1085282544423220871" },
+    { id: 24, date: "2026-06-03", name: "【麥當勞】麥香雞_0965", code: "MDN9712401969203" },
+    { id: 25, date: "2026-06-03", name: "【麥當勞】麥香雞_0966", code: "MDN7184935221854" },
+    { id: 26, date: "2026-06-06", name: "【麥當勞】麥香雞_0965", code: "MDN6606422764433" },
+    { id: 27, date: "2026-06-07", name: "【85度C】35元飲品_0971", code: "E1085139261426337514" },
+    { id: 28, date: "2026-06-08", name: "【85度C】35元飲品_5452", code: "E1086361842669837125" },
+    { id: 29, date: "2026-06-11", name: "【ViVi PARK】Vi幣 30點", code: "17413DTX781C" },
+    { id: 30, date: "2026-06-11", name: "【ViVi PARK】Vi幣 30點", code: "1741332UAX81" },
+    { id: 31, date: "2026-06-11", name: "【ViVi PARK】Vi幣 30點", code: "17413A26S6B5" },
+    { id: 32, date: "2026-06-11", name: "【ViVi PARK】Vi幣 30點", code: "17413WRW6KCE" },
+    { id: 33, date: "2026-06-11", name: "【ViVi PARK】Vi幣 50點", code: "174131N1Q42A" },
+    { id: 34, date: "2026-06-11", name: "【ViVi PARK】Vi幣 50點", code: "17413826LF6C" },
+    { id: 35, date: "2026-06-11", name: "【ViVi PARK】Vi幣 50點", code: "17413279A4ED" },
+    { id: 36, date: "2026-06-11", name: "【ViVi PARK】Vi幣 50點", code: "174132R79RC1" },
+    { id: 37, date: "2026-06-11", name: "【ViVi PARK】Vi幣 50點", code: "174134W3K387" },
+    { id: 38, date: "2026-06-11", name: "【ViVi PARK】Vi幣 50點", code: "174136HK6P58" },
+    { id: 39, date: "2026-06-11", name: "【ViVi PARK】Vi幣 50點", code: "17413A49Y557" },
+    { id: 40, date: "2026-06-11", name: "【ViVi PARK】Vi幣 50點", code: "174134A8VA4B" },
+    { id: 41, date: "2026-06-11", name: "【ViVi PARK】Vi幣 50點", code: "17413EV43Y64" },
+    { id: 42, date: "2026-06-11", name: "【ViVi PARK】Vi幣 50點", code: "17413G658W21" },
+    { id: 43, date: "2026-06-13", name: "【85度C】75元飲品_0971", code: "E3166244252095778276" },
+    { id: 44, date: "2026-06-13", name: "【85度C】85元飲品_0989", code: "E3173598062573858552" },
+    { id: 45, date: "2026-06-13", name: "【MOS 摩斯】元氣牛肉蛋堡", code: "998970025" },
+    { id: 46, date: "2026-06-13", name: "【麥當勞】勁辣雞腿堡_0966", code: "MDN7919354001904" },
+    { id: 47, date: "2026-06-13", name: "【麥當勞】四盎司牛肉堡", code: "MDN9266412547499" },
+    { id: 48, date: "2026-06-13", name: "【麥當勞】大麥克_0966", code: "MDN0512350468910" },
+    { id: 49, date: "2026-06-13", name: "【麥當勞】嫩煎雞腿堡_0909", code: "MDN6029450483175" },
+    { id: 50, date: "2026-06-13", name: "【麥當勞】嫩煎雞腿堡_0935", code: "MDN6716579606400" },
+    { id: 51, date: "2026-06-13", name: "【麥當勞】嫩煎雞腿堡_0952", code: "MDN5350026449549" },
+    { id: 52, date: "2026-06-13", name: "【麥當勞】嫩煎雞腿堡_0960", code: "MDN7372976274141" },
+    { id: 53, date: "2026-06-13", name: "【麥當勞】雙層牛肉吉事堡", code: "MDN8319630791063" },
+    { id: 54, date: "2026-06-17", name: "【85度C】50元飲品_0989", code: "E1168992844284777938" },
+    { id: 55, date: "2026-06-17", name: "【Mister Donut】甜甜圈_0900", code: "426276286" },
+    { id: 56, date: "2026-06-17", name: "【Mister Donut】甜甜圈_5452", code: "426220388" },
+    { id: 57, date: "2026-06-17", name: "【麥當勞】漢堡_0966", code: "MDN3378175768313" },
+    { id: 58, date: "2026-06-17", name: "【麥當勞】麥香魚_0960", code: "MDN1660988734633" },
+    { id: 59, date: "2026-06-17", name: "【麥當勞】麥香魚_0989", code: "MDN2545819026660" },
+    { id: 60, date: "2026-06-17", name: "【麥當勞】麥香雞_0926", code: "MDN2794484984134" },
+    { id: 61, date: "2026-06-25", name: "【85度C】50元飲品_0952", code: "E1162575927703844525" },
+    { id: 62, date: "2026-06-26", name: "【麥當勞】麥香雞_0960", code: "MDN5872963889921" },
+    { id: 63, date: "2026-06-28", name: "【ViVi PARK】Vi幣 30點", code: "174136592R6B" },
+    { id: 64, date: "2026-06-28", name: "【ViVi PARK】Vi幣 30點", code: "17413SWJ5F67" },
+    { id: 65, date: "2026-06-28", name: "【麥當勞】漢堡_0966", code: "MDN5922532731924" },
+    { id: 66, date: "2026-06-30", name: "【蒜翻天】地瓜條/細薯條", code: "25371K51K68C" },
+    { id: 67, date: "2026-06-30", name: "【蒜翻天】地瓜條/細薯條", code: "25371R6N119B" },
+    { id: 68, date: "2026-06-30", name: "【蒜翻天】炸甜不辣_0909", code: "25371RX8571C" },
+    { id: 69, date: "2026-06-30", name: "【蒜翻天】炸甜不辣_0960", code: "25371YP34K3C" },
+    { id: 70, date: "2026-06-30", name: "【蒜翻天】炸甜不辣_0966", code: "25371QVX5DC7" },
+    { id: 71, date: "2026-06-30", name: "【蒜翻天】炸甜不辣_0989", code: "25371XB7JN6F" },
+    { id: 72, date: "2026-06-30", name: "【蒜翻天】炸甜不辣_5452", code: "253712Q18PF7" },
+    { id: 73, date: "2026-06-30", name: "【蒜翻天】蘿蔔糕/糯米腸", code: "253717543265" },
+    { id: 74, date: "2026-06-30", name: "【蒜翻天】蘿蔔糕/糯米腸", code: "25371D9XUV24" },
+    { id: 75, date: "2026-06-30", name: "【蒜翻天】蘿蔔糕/糯米腸", code: "25371LR1451B" },
+    { id: 76, date: "2026-06-30", name: "【蒜翻天】蘿蔔糕/糯米腸", code: "2537127UEP77" },
+    { id: 77, date: "2026-06-30", name: "【蒜翻天】蘿蔔糕/糯米腸", code: "25371U5TPFA5" },
+    { id: 78, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "253713B1576E" },
+    { id: 79, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "25371A9QUU3D" },
+    { id: 80, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "2537188UHR52" },
+    { id: 81, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "25371WN62Y86" },
+    { id: 82, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "25371331FPA4" },
+    { id: 83, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "25371386XHED" },
+    { id: 84, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "253712YA74A3" },
+    { id: 85, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "25371318M52E" },
+    { id: 86, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "253719F3QYDB" },
+    { id: 87, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "2537191CFHE9" },
+    { id: 88, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "253711K8DP37" },
+    { id: 89, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "253711E6G978" },
+    { id: 90, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "25371W883258" },
+    { id: 91, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "253719B6RBB1" },
+    { id: 92, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "25371V19CJ83" },
+    { id: 93, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "25371M4RP5F8" },
+    { id: 94, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "253717628552" },
+    { id: 95, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "253716556VFD" },
+    { id: 96, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "25371NP21L72" },
+    { id: 97, date: "2026-07-01", name: "【ViVi PARK】Vi幣 50點", code: "174132BS614A" },
+    { id: 98, date: "2026-07-01", name: "【ViVi PARK】Vi幣 50點", code: "17413LW274CE" },
+    { id: 99, date: "2026-07-01", name: "【ViVi PARK】Vi幣 50點", code: "174136U465CD" },
+    { id: 100, date: "2026-07-02", name: "【85度C】35元飲品_0909", code: "E1081988645337166703" },
+    { id: 101, date: "2026-07-02", name: "【85度C】35元飲品_0926", code: "E1081161005865306821" },
+    { id: 102, date: "2026-07-02", name: "【85度C】35元飲品_0935", code: "E1081113158444567629" },
+    { id: 103, date: "2026-07-02", name: "【麥當勞】漢堡_0989", code: "MDN7492416155899" },
+    { id: 104, date: "2026-07-02", name: "【麥當勞】漢堡_0989", code: "MDN7083174019945" },
+    { id: 105, date: "2026-07-05", name: "【85度C】35元飲品_0900", code: "E1084399092425207487" },
+    { id: 106, date: "2026-07-05", name: "【麥當勞】漢堡_0989", code: "MDN7565117474590" },
+    { id: 107, date: "2026-07-07", name: "【85度C】35元飲品_0952", code: "E1087108581007720679" },
+    { id: 108, date: "2026-07-16", name: "【85度C】35元飲品_0903", code: "E1081249514901393713" },
+    { id: 109, date: "2026-07-16", name: "【85度C】35元飲品_0971", code: "E1080380156503001789" },
+    { id: 110, date: "2026-07-16", name: "【麥當勞】漢堡_0989", code: "MDN4072812866794" },
+    { id: 111, date: "2026-07-16", name: "【麥當勞】蘋果派_0989", code: "MDN7866230032400" },
+    { id: 112, date: "2026-07-22", name: "【85度C】35元飲品_5452", code: "E1086107377607020809" },
+    { id: 113, date: "2026-07-23", name: "【85度C】35元飲品_0903", code: "E1087684461173797277" },
+    { id: 114, date: "2026-07-29", name: "【85度C】50元飲品_0952", code: "E1169859481600177757" },
+    { id: 115, date: "2026-07-29", name: "【麥當勞】大蛋捲冰淇淋", code: "MDN4307860468531" },
+    { id: 116, date: "2026-08-01", name: "【85度C】35元飲品_1829", code: "E1086872914434438770" },
+    { id: 117, date: "2026-08-08", name: "【85度C】50元飲品_1829", code: "E1165118012164032777" },
+    { id: 118, date: "2026-08-08", name: "【85度C】60元飲品_0935", code: "E1224359593317345748" },
+    { id: 119, date: "2026-08-08", name: "【85度C】65元飲品_0926", code: "E1431399236560701302" },
+    { id: 120, date: "2026-08-08", name: "【85度C】65元飲品_5452", code: "E1431345110677071353" },
+    { id: 121, date: "2026-08-08", name: "【Mister Donut】一入甜甜圈", code: "428321960" },
+    { id: 122, date: "2026-08-25", name: "【21風味館】烤雞腿_0935", code: "E942229480" },
+    { id: 123, date: "2026-08-25", name: "【麥當勞】勁辣雞腿堡_0926", code: "MDN6627202066272" },
+    { id: 124, date: "2026-08-25", name: "【麥當勞】嫩煎雞腿堡_0952", code: "MDN9183789417545" },
+    { id: 125, date: "2026-09-05", name: "【85度C】50元飲品_0903", code: "E1165090734345012987" },
+    { id: 126, date: "2026-09-05", name: "【85度C】50元飲品_0952", code: "E1165090734345012987" },
+    { id: 127, date: "2026-09-18", name: "【85度C】58元切片蛋糕", code: "E2149141868910237014" },
+    { id: 128, date: "2026-09-29", name: "【85度C】50元飲品_0903", code: "E1162122540118092090" },
+    { id: 129, date: "2026-09-29", name: "【85度C】68元切片蛋糕", code: "E3316116399610252455" },
+    { id: 130, date: "2026-10-02", name: "【85度C】35元飲品_0926", code: "E1086764192817495843" },
+    { id: 131, date: "2026-10-02", name: "【85度C】55元飲品_0903", code: "E1099411561690745183" },
+    { id: 132, date: "2026-10-07", name: "【85度C】35元飲品_0935", code: "E1086649141374950488" },
+    { id: 133, date: "2026-10-07", name: "【85度C】35元飲品_0935", code: "E1087515843813907573" },
+    { id: 134, date: "2026-10-07", name: "【85度C】35元飲品_0935", code: "E1089085475691317288" },
+    { id: 135, date: "2026-10-07", name: "【85度C】35元飲品_0952", code: "E1089725179953847367" },
+    { id: 136, date: "2026-10-07", name: "【85度C】35元飲品_0952", code: "E1086628190839064881" },
+    { id: 137, date: "2026-10-07", name: "【85度C】55元飲品_0926", code: "E1093952463915265880" },
+    { id: 138, date: "2026-10-07", name: "【85度C】65元飲品_0935", code: "E1433410304217094332" },
+    { id: 139, date: "2026-10-12", name: "【85度C】50元飲品_0903", code: "E1162653475446219558" },
+    { id: 140, date: "2026-10-12", name: "【85度C】50元飲品_0926", code: "E1162578339988671119" },
+    { id: 141, date: "2026-10-12", name: "【85度C】50元飲品_0935", code: "E1162567186214968092" },
+    { id: 142, date: "2026-10-12", name: "【85度C】50元飲品_0952", code: "E1162539477337414074" },
+    { id: 143, date: "2026-10-25", name: "【85度C】55元飲品_0935", code: "E1099367874250999030" },
+    { id: 144, date: "2026-10-25", name: "【85度C】55元飲品_0952", code: "E1099152146030911521" },
+    { id: 145, date: "2026-10-25", name: "【85度C】58元切片蛋糕", code: "E2149570601789273209" },
+    { id: 146, date: "2026-10-25", name: "【85度C】99元切片蛋糕", code: "E3244038459083687990" },
+    { id: 147, date: "2026-10-25", name: "【85度C】99元切片蛋糕", code: "E3244038155836950360" },
+    { id: 148, date: "2026-10-25", name: "【麥當勞】嫩煎雞腿堡_0926", code: "MDN9580830462746" },
+    { id: 149, date: "2026-10-25", name: "【麥當勞】漢堡_0903", code: "MDN8351468213916" },
+    { id: 150, date: "2026-10-29", name: "【85度C】68元切片蛋糕", code: "E3318354180476730381" }
+];
+
+// 解鎖功能
+function unlock() {
+    const input = document.getElementById('pw-input').value;
+    if (input === CORRECT_PASS) {
+        $("#lock-screen").fadeOut(300);
+        $("#main-wrapper").show();
+        renderTickets();
+    } else {
+        alert("密碼不正確");
+        document.getElementById('pw-input').value = "";
+    }
+}
+
+// 渲染票券清單
+function renderTickets() {
+    let html = "";
+    const today = new Date("2026-05-01"); // 當前模擬日期
+    
+    data.forEach(item => {
+        const expDate = new Date(item.date);
+        const isExpired = expDate < today;
+        const isUrgent = (expDate - today) / (1000 * 60 * 60 * 24) <= 1; // 1天內到期
+        
+        html += `<tr class="${isExpired ? 'hide-mobile' : ''}">
+                    <td>${item.id}</td>
+                    <td class="hide-mobile ${isExpired || isUrgent ? 'expired-text' : ''}">${item.date}</td>
+                    <td class="item-info">
+                        <span class="item-name ${isExpired || isUrgent ? 'expired-text' : ''}">${item.name}</span>
+                        <span class="item-date hide-mobile">到期日: ${item.date}</span>
+                    </td>
+                    <td><span class="emoji-btn" onclick="showTicket('${item.code}', '${item.name}')">🎫</span></td>
+                </tr>`;
+    });
+    document.getElementById('ticket-list').innerHTML = html;
+}
+
+// 顯示條碼面板
+function showTicket(code, name) {
+    // 醒目顯示選中行
+    $('tr').removeClass('row-selected');
+    $(`.emoji-btn[onclick*="${code}"]`).closest('tr').addClass('row-selected');
+
+    // 更新面板內容
+    $("#p-title").text(name);
+    $("#p-code").text(code);
+    $("#img-qr").attr("src", `https://m.momoshop.com.tw/mymomo/ajaxProduceImage.jsp?code=${code}&type=0`);
+    $("#img-bar").attr("src", `https://m.momoshop.com.tw/mymomo/ajaxProduceImage.jsp?code=${code}&type=1`);
+    
+    $("#display-zone").slideDown(200);
+    window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+// 複製序號
+function copyValue() {
+    const text = document.getElementById("p-code").innerText;
+    navigator.clipboard.writeText(text).then(() => {
+        alert("已複製序號: " + text);
+    }).catch(err => {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        alert("已複製序號");
+    });
+}
+
+// 監聽 Enter 鍵
+document.getElementById('pw-input').addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') unlock();
+});
+</script>
+
+</body>
+</html>
+
+<script>
+    $('.emoji').click(function(){
+        const key = $(this).attr("id");
+        const row = $(this).closest('tr');
+        const name = row.find('.text-left').text();
+
+        // 標記已選行
+        $('tr').removeClass('row-active');
+        row.addClass('row-active');
+
+        // 更新顯示內容
+        $("#p-name").text(name);
+        $("#p-code").text(key);
+        $("#img-qr").attr("src", "https://m.momoshop.com.tw/mymomo/ajaxProduceImage.jsp?code="+key+"&type=0");
+        $("#img-bar").attr("src", "https://m.momoshop.com.tw/mymomo/ajaxProduceImage.jsp?code="+key+"&type=1");
+        
+        $("#display-zone").slideDown();
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+
+    function copyText() {
+        const text = document.getElementById("p-code").innerText;
+        navigator.clipboard.writeText(text).then(() => {
+            alert("已複製序號: " + text);
+        }).catch(() => {
+            // iOS 舊版備用方案
+            const el = document.createElement('textarea');
+            el.value = text;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            alert("已複製序號");
+        });
+    }
+</script>
+</body>
+</html>
