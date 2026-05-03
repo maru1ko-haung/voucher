@@ -1,171 +1,125 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MOMO 票券管理系統</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <style>
-        body { font-family: -apple-system, system-ui, sans-serif; background: #F2F2F7; margin: 0; padding-bottom: 50px; }
-        
-        /* 頂部固定顯示區 */
-        #display-zone {
-            position: sticky; top: 0; background: white; z-index: 1000;
-            border-bottom: 1px solid #C6C6C8; padding: 15px; text-align: center;
-            display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-        }
-        #img-qr { width: 140px; margin-bottom: 10px; }
-        #img-bar { width: 90%; max-width: 320px; height: 60px; display: block; margin: 0 auto; }
-        .code-box { 
-            background: #F2F2F7; padding: 8px; border-radius: 6px; 
-            font-family: monospace; font-size: 18px; margin: 10px 0; display: inline-block;
-        }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MOMO 私人票券庫</title>
 
-        /* 表格排版 */
-        .container { padding: 10px; }
-        table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; }
-        th { background: #E5E5EA; padding: 12px 5px; font-size: 13px; }
-        td { border-bottom: 1px solid #E5E5EA; padding: 12px 8px; font-size: 14px; text-align: center; }
-        .text-left { text-align: left; font-size: 13px; color: #333; }
-        
-        /* 狀態標籤 */
-        .emoji { font-size: 30px; cursor: pointer; -webkit-user-select: none; }
-        .expired { color: #FF3B30; font-weight: bold; }
-        .row-active { background-color: #FFF9C4 !important; }
-        .close-btn { background: #007AFF; color: white; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 600; margin-top: 10px; }
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-        @media screen and (max-width: 480px) {
-            .hide-mobile { display: none; }
-            td { padding: 10px 4px; }
-        }
-    </style>
+<style>
+body { font-family: -apple-system, system-ui; background: #F2F2F7; margin:0; }
+
+/* 🔒 鎖定畫面 */
+#lock-screen {
+    position: fixed; width:100%; height:100%;
+    background:#F2F2F7;
+    display:flex; align-items:center; justify-content:center;
+    z-index: 999;
+}
+.lock-box {
+    background:white; padding:30px; border-radius:20px;
+    text-align:center; width:80%;
+}
+input { width:90%; padding:15px; margin:20px 0; font-size:18px; text-align:center; }
+button { padding:15px; width:100%; border:none; background:#007AFF; color:white; border-radius:10px; cursor:pointer; }
+
+/* 主畫面 */
+#main-wrapper { display:none; }
+
+.container { padding:10px; }
+
+table { width:100%; background:white; border-radius:12px; border-collapse: collapse; }
+td, th { padding:10px; text-align:center; border-bottom: 1px solid #eee; }
+
+/* 1. 已開啟記錄顏色區分 */
+.row-opened { background-color: #E5E5EA !important; color: #8E8E93; }
+.opened-tag { font-size: 10px; color: #007AFF; font-weight: bold; }
+
+.item-info { text-align:left; }
+.expired-text { color:#FF3B30; }
+
+.emoji-btn { font-size:26px; cursor:pointer; }
+
+/* ✅ QR & Barcode 修正 */
+#display-zone {
+    display:none;
+    position: fixed; top:0; left:0; width:100%; height:100%;
+    background:white; z-index: 1000;
+    flex-direction: column; align-items: center; justify-content: center;
+}
+
+.qr-fixed-box {
+    width:150px; /* QR 固定 150px */
+    aspect-ratio:1/1;
+    margin: 10px auto;
+    background:#fff;
+    border: 1px solid #eee;
+}
+#img-qr { display:block; width:100%; height:100%; object-fit:contain; }
+
+/* 3. Barcode 寬度比 QR 大 1mm (約 4px) */
+.bar-container {
+    width: 154px; 
+    margin: 10px auto;
+}
+#img-bar { width:100%; height:auto; display:block; }
+
+.code-box {
+    font-family:monospace;
+    font-size:18px;
+    margin:20px;
+    padding: 10px;
+    background: #f0f0f0;
+    border-radius: 5px;
+}
+</style>
 </head>
-<body>
 
-<div id="display-zone">
-    <div id="p-name" style="font-weight:bold; color:#D00278; margin-bottom:10px;"></div>
-    <img id="img-qr" src=""><br>
-    <img id="img-bar" src="">
-    <div id="p-code" class="code-box" onclick="copyText()"></div>
-    <div style="font-size:12px; color:#888;">↑ 點擊序號可複製 ↑</div>
-    <button class="close-btn" onclick="$('#display-zone').slideUp()">關閉視窗</button>
-</div>
-
-<div class="container">
-    <h3 style="margin-left:10px;">🎫 MOMO 票券庫存 (150)</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>#</th>
-                <th class="hide-mobile">到期日</th>
-                <th>品項名稱</th>
-                <th>兌換</th>
-            </tr>
-        </thead>
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MOMO 私人票券庫</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <style>
-        body { font-family: -apple-system, system-ui, sans-serif; background: #F2F2F7; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        
-        /* 密碼鎖定層 */
-        #lock-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #F2F2F7; z-index: 9999; display: flex; align-items: center; justify-content: center;
-        }
-        .lock-box { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; width: 80%; max-width: 320px; }
-        .lock-box h2 { color: #D00278; margin-bottom: 10px; }
-        input[type="password"] { 
-            width: 90%; padding: 15px; margin: 20px 0; border: 1px solid #DDD; 
-            border-radius: 12px; font-size: 18px; text-align: center; outline: none;
-        }
-        .unlock-btn { 
-            background: #007AFF; color: white; border: none; padding: 15px; 
-            border-radius: 12px; font-weight: 600; font-size: 16px; width: 100%; cursor: pointer;
-        }
-
-        /* 主內容區 */
-        #main-wrapper { display: none; }
-
-        /* 頂部固定顯示區 (iOS 兌換面板) */
-        #display-zone {
-            position: sticky; top: 0; background: rgba(255,255,255,0.95);
-            -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
-            z-index: 1000; border-bottom: 1px solid #C6C6C8; padding: 15px; text-align: center;
-            display: none; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        #img-qr { width: 130px; margin-bottom: 5px; }
-        #img-bar { width: 100%; max-width: 320px; height: 60px; display: block; margin: 5px auto; }
-        .code-box { background: #E5E5EA; padding: 8px 15px; border-radius: 8px; font-family: monospace; font-size: 20px; margin: 10px 0; display: inline-block; color: #000; }
-        
-        /* 表格排版 */
-        .container { padding: 10px; }
-        table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        th { background: #F8F8F8; padding: 12px 5px; font-size: 12px; color: #8E8E93; text-transform: uppercase; }
-        td { border-bottom: 1px solid #E5E5EA; padding: 12px 8px; font-size: 14px; text-align: center; }
-        .item-info { text-align: left; line-height: 1.4; }
-        .item-name { font-weight: 500; display: block; }
-        .item-date { font-size: 12px; color: #8E8E93; }
-        
-        /* 狀態標記 */
-        .emoji-btn { font-size: 28px; cursor: pointer; text-decoration: none; display: inline-block; }
-        .expired-text { color: #FF3B30; font-weight: bold; }
-        .row-selected { background-color: #FFF9C4 !important; }
-        .close-btn { background: none; border: none; color: #007AFF; font-size: 16px; font-weight: 600; margin-top: 10px; cursor: pointer; }
-
-        @media screen and (max-width: 480px) {
-            .hide-mobile { display: none; }
-            td { padding: 10px 5px; }
-        }
-    </style>
-</head>
 <body>
 
 <div id="lock-screen">
     <div class="lock-box">
         <h2>MOMO Wallet</h2>
-        <p style="color:#666;">私人管理系統</p>
-        <input type="password" id="pw-input" placeholder="輸入解鎖密碼" pattern="\d*" inputmode="numeric">
-        <button class="unlock-btn" onclick="unlock()">解鎖</button>
+        <input type="password" id="pw-input" placeholder="密碼">
+        <button onclick="unlock()">解鎖</button>
     </div>
 </div>
 
 <div id="main-wrapper">
     <div id="display-zone">
-        <div id="p-title" style="font-size:14px; color:#D00278; font-weight:bold; margin-bottom:8px;"></div>
-        <img id="img-qr" src=""><br>
-        <img id="img-bar" src="">
+        <h2 id="p-title" style="padding:0 20px; text-align:center;"></h2>
+        <div class="qr-fixed-box"><img id="img-qr"></div>
+        <div class="bar-container"><img id="img-bar"></div>
         <div id="p-code" class="code-box" onclick="copyValue()"></div>
-        <div style="font-size:11px; color:#8E8E93;">點擊序號可複製，給店員掃描長條碼即可</div>
-        <button class="close-btn" onclick="$('#display-zone').slideUp()">關閉</button>
+        <button style="width:200px;" onclick="$('#display-zone').css('display','none')">關閉</button>
     </div>
 
     <div class="container">
-        <h3 style="margin: 15px 0 10px 10px;">總計 150 張票券</h3>
+        <h3 id="title"></h3>
         <table>
             <thead>
                 <tr>
                     <th>#</th>
-                    <th class="hide-mobile">到期日</th>
-                    <th>品項名稱</th>
-                    <th>管理</th>
+                    <th>到期日</th>
+                    <th>名稱</th>
+                    <th>操作</th>
                 </tr>
             </thead>
-            <tbody id="ticket-list">
-                </tbody>
+            <tbody id="ticket-list"></tbody>
         </table>
+        <div style="text-align: center; margin: 20px;">
+            <button style="background:#8E8E93; width: 120px;" onclick="resetLock()">重新鎖定</button>
+        </div>
     </div>
 </div>
 
 <script>
-// 設定管理密碼
 const CORRECT_PASS = "2724203";
+// 從 localStorage 讀取已開啟的 ID
+let openedTickets = JSON.parse(localStorage.getItem('openedTickets') || "[]");
 
-// 150 筆票券資料
+/* ✅ 原始資料 */
 const data = [
     { id: 1, date: "2025-08-10", name: "【漢堡王】花生培根脆雞堡組合(過期)", code: "0107158673552685" },
     { id: 2, date: "2025-08-11", name: "【漢堡王】花生培根脆雞堡組合(過期)", code: "0107158994241846" },
@@ -175,25 +129,14 @@ const data = [
     { id: 6, date: "2026-03-20", name: "【21風味館】烤雞腿(過期)", code: "E206304448" },
     { id: 7, date: "2026-04-16", name: "【85度C】50元飲品(過期)", code: "E1160436034978871805" },
     { id: 8, date: "2026-04-26", name: "【85度C】35元飲品(過期)", code: "E1086913617208961724" },
-    { id: 9, date: "2026-05-02", name: "【85度C】35元飲品 (明日到期!)", code: "E1082871022901766866" },
-    { id: 10, date: "2026-05-22", name: "【85度C】55元飲品_0989", code: "E1094572101317370172" },
-    { id: 11, date: "2026-05-22", name: "【85度C】60元飲品_0952", code: "E1228236709909992484" },
     { id: 12, date: "2026-05-22", name: "【麥當勞】雙層牛肉吉事堡_5452", code: "MDN5696604503948" },
-    { id: 13, date: "2026-05-27", name: "【85度C】50元飲品_0952", code: "E1169692214793275381" },
-    { id: 14, date: "2026-05-27", name: "【85度C】50元飲品_0960", code: "E1169869614536436311" },
-    { id: 15, date: "2026-05-27", name: "【85度C】55元飲品_0909", code: "E1099560174792268366" },
-    { id: 16, date: "2026-05-27", name: "【85度C】65元飲品_0903", code: "E1432684009493791465" },
     { id: 17, date: "2026-05-27", name: "【麥當勞】漢堡_0989", code: "MDN3331351701013" },
     { id: 18, date: "2026-05-27", name: "【麥當勞】麥香魚_0935", code: "MDN5168596732232" },
     { id: 19, date: "2026-05-27", name: "【麥當勞】麥香雞_0989", code: "MDN0736626447792" },
     { id: 20, date: "2026-05-27", name: "【麥當勞】麥香雞_1829", code: "MDN0702398061980" },
-    { id: 21, date: "2026-06-03", name: "【85度C】35元飲品_0909", code: "E1089714668331207664" },
-    { id: 22, date: "2026-06-03", name: "【85度C】35元飲品_0926", code: "E1085296298069651706" },
-    { id: 23, date: "2026-06-03", name: "【85度C】35元飲品_0966", code: "E1085282544423220871" },
     { id: 24, date: "2026-06-03", name: "【麥當勞】麥香雞_0965", code: "MDN9712401969203" },
     { id: 25, date: "2026-06-03", name: "【麥當勞】麥香雞_0966", code: "MDN7184935221854" },
     { id: 26, date: "2026-06-06", name: "【麥當勞】麥香雞_0965", code: "MDN6606422764433" },
-    { id: 27, date: "2026-06-07", name: "【85度C】35元飲品_0971", code: "E1085139261426337514" },
     { id: 28, date: "2026-06-08", name: "【85度C】35元飲品_5452", code: "E1086361842669837125" },
     { id: 29, date: "2026-06-11", name: "【ViVi PARK】Vi幣 30點", code: "17413DTX781C" },
     { id: 30, date: "2026-06-11", name: "【ViVi PARK】Vi幣 30點", code: "1741332UAX81" },
@@ -319,118 +262,110 @@ const data = [
     { id: 150, date: "2026-10-29", name: "【85度C】68元切片蛋糕", code: "E3318354180476730381" }
 ];
 
-// 解鎖功能
+/* 🔒 2. 解鎖邏輯：自動檢查與持久化 */
+window.onload = function() {
+    const isUnlocked = localStorage.getItem('wallet_unlocked');
+    if (isUnlocked === 'true') {
+        showMain();
+    }
+};
+
 function unlock() {
-    const input = document.getElementById('pw-input').value;
-    if (input === CORRECT_PASS) {
-        $("#lock-screen").fadeOut(300);
-        $("#main-wrapper").show();
-        renderTickets();
+    if (document.getElementById('pw-input').value === CORRECT_PASS) {
+        localStorage.setItem('wallet_unlocked', 'true');
+        showMain();
     } else {
-        alert("密碼不正確");
-        document.getElementById('pw-input').value = "";
+        alert("密碼錯誤");
     }
 }
 
-// 渲染票券清單
-function renderTickets() {
-    let html = "";
-    const today = new Date("2026-05-01"); // 當前模擬日期
-    
-    data.forEach(item => {
-        const expDate = new Date(item.date);
-        const isExpired = expDate < today;
-        const isUrgent = (expDate - today) / (1000 * 60 * 60 * 24) <= 1; // 1天內到期
-        
-        html += `<tr class="${isExpired ? 'hide-mobile' : ''}">
-                    <td>${item.id}</td>
-                    <td class="hide-mobile ${isExpired || isUrgent ? 'expired-text' : ''}">${item.date}</td>
-                    <td class="item-info">
-                        <span class="item-name ${isExpired || isUrgent ? 'expired-text' : ''}">${item.name}</span>
-                        <span class="item-date hide-mobile">到期日: ${item.date}</span>
-                    </td>
-                    <td><span class="emoji-btn" onclick="showTicket('${item.code}', '${item.name}')">🎫</span></td>
-                </tr>`;
-    });
-    document.getElementById('ticket-list').innerHTML = html;
+function showMain() {
+    document.getElementById('lock-screen').style.display='none';
+    document.getElementById('main-wrapper').style.display='block';
+    renderTickets();
 }
 
-// 顯示條碼面板
-function showTicket(code, name) {
-    // 醒目顯示選中行
-    $('tr').removeClass('row-selected');
-    $(`.emoji-btn[onclick*="${code}"]`).closest('tr').addClass('row-selected');
+function resetLock() {
+    localStorage.removeItem('wallet_unlocked');
+    location.reload();
+}
 
-    // 更新面板內容
+/* 🚀 排序 + 渲染 */
+function renderTickets() {
+    const today = new Date();
+    document.getElementById("title").innerText =
+        "今日 " + today.toLocaleDateString() + " ｜ 共 " + data.length + " 張";
+
+    const sorted = [...data].sort((a,b)=>{
+        const da=new Date(a.date);
+        const db=new Date(b.date);
+        const diffA=(da-today)/86400000;
+        const diffB=(db-today)/86400000;
+        const p = d => d<0?4:d<=1?1:d<=7?2:3;
+        if(p(diffA)!==p(diffB)) return p(diffA)-p(diffB);
+        return da-db;
+    });
+
+    let html="";
+    sorted.forEach(item=>{
+        const d=new Date(item.date);
+        const diff=(d-today)/86400000;
+        const isOpened = openedTickets.includes(item.id);
+
+        let tag="";
+        if(diff<0) tag="❌過期";
+        else if(diff<=1) tag="🔥明天到期";
+        else if(diff<=7) tag="⚠️7天內";
+
+        // 1. 開啟顏色區分 (row-opened)
+        html+=`
+        <tr id="row-${item.id}" class="${isOpened ? 'row-opened' : ''}">
+            <td>${item.id}</td>
+            <td>${item.date}</td>
+            <td class="item-info">
+                ${item.name}
+                ${isOpened ? '<span class="opened-tag"> (已開)</span>' : ''}
+                <div style="font-size:12px;color:#999">${tag}</div>
+            </td>
+            <td><span class="emoji-btn" onclick="showTicket(${item.id}, '${item.code}','${item.name}')">🎫</span></td>
+        </tr>`;
+    });
+
+    document.getElementById('ticket-list').innerHTML=html;
+
+    setTimeout(()=>{
+        const t=document.querySelector('.expired-text');
+        if(t) t.scrollIntoView({behavior:'smooth'});
+    },300);
+}
+
+/* 🎫 顯示票券 */
+function showTicket(id, code, name){
+    // 記錄開啟狀態
+    if (!openedTickets.includes(id)) {
+        openedTickets.push(id);
+        localStorage.setItem('openedTickets', JSON.stringify(openedTickets));
+        renderTickets(); // 重新渲染以更新顏色
+    }
+
     $("#p-title").text(name);
     $("#p-code").text(code);
-    $("#img-qr").attr("src", `https://m.momoshop.com.tw/mymomo/ajaxProduceImage.jsp?code=${code}&type=0`);
-    $("#img-bar").attr("src", `https://m.momoshop.com.tw/mymomo/ajaxProduceImage.jsp?code=${code}&type=1`);
-    
-    $("#display-zone").slideDown(200);
-    window.scrollTo({top: 0, behavior: 'smooth'});
+
+    $("#img-qr").attr("src",
+      `https://m.momoshop.com.tw/mymomo/ajaxProduceImage.jsp?code=${code}&type=0`);
+
+    $("#img-bar").attr("src",
+      `https://m.momoshop.com.tw/mymomo/ajaxProduceImage.jsp?code=${code}&type=1`);
+
+    $("#display-zone").css("display", "flex");
 }
 
-// 複製序號
-function copyValue() {
-    const text = document.getElementById("p-code").innerText;
-    navigator.clipboard.writeText(text).then(() => {
-        alert("已複製序號: " + text);
-    }).catch(err => {
-        const textArea = document.createElement("textarea");
-        textArea.value = text;
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textArea);
-        alert("已複製序號");
-    });
+/* 📋 複製 */
+function copyValue(){
+    navigator.clipboard.writeText($("#p-code").text());
+    alert("已複製");
 }
-
-// 監聽 Enter 鍵
-document.getElementById('pw-input').addEventListener('keypress', function (e) {
-    if (e.key === 'Enter') unlock();
-});
 </script>
 
-</body>
-</html>
-
-<script>
-    $('.emoji').click(function(){
-        const key = $(this).attr("id");
-        const row = $(this).closest('tr');
-        const name = row.find('.text-left').text();
-
-        // 標記已選行
-        $('tr').removeClass('row-active');
-        row.addClass('row-active');
-
-        // 更新顯示內容
-        $("#p-name").text(name);
-        $("#p-code").text(key);
-        $("#img-qr").attr("src", "https://m.momoshop.com.tw/mymomo/ajaxProduceImage.jsp?code="+key+"&type=0");
-        $("#img-bar").attr("src", "https://m.momoshop.com.tw/mymomo/ajaxProduceImage.jsp?code="+key+"&type=1");
-        
-        $("#display-zone").slideDown();
-        window.scrollTo({top: 0, behavior: 'smooth'});
-    });
-
-    function copyText() {
-        const text = document.getElementById("p-code").innerText;
-        navigator.clipboard.writeText(text).then(() => {
-            alert("已複製序號: " + text);
-        }).catch(() => {
-            // iOS 舊版備用方案
-            const el = document.createElement('textarea');
-            el.value = text;
-            document.body.appendChild(el);
-            el.select();
-            document.execCommand('copy');
-            document.body.removeChild(el);
-            alert("已複製序號");
-        });
-    }
-</script>
 </body>
 </html>
