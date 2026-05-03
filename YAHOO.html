@@ -25,17 +25,44 @@
         #m-head { padding: 12px; background: #f8fafc; text-align: right; border-bottom: 1px solid #eee; }
         #close-btn { padding: 8px 20px; background: #e11d48; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
         iframe { flex: 1; border: none; width: 100%; }
+        .logout-btn { font-size: 0.7rem; color: #94a3b8; cursor: pointer; text-decoration: underline; margin-top: 10px; display: block; }
     </style>
     <script>
         (function() {
-            const pass = prompt("請輸入提取密碼：");
-            if (pass === "2724203") {
-                window.onload = function() { document.body.style.display = 'flex'; };
-            } else {
-                alert("密碼錯誤！");
-                window.location.href = "https://www.google.com";
+            const STORAGE_KEY = "voucher_auth_pass";
+            const CORRECT_PASS = "2724203";
+            
+            function checkAuth() {
+                let savedPass = localStorage.getItem(STORAGE_KEY);
+                
+                if (savedPass === CORRECT_PASS) {
+                    showPage();
+                } else {
+                    let inputPass = prompt("請輸入提取密碼：");
+                    if (inputPass === CORRECT_PASS) {
+                        localStorage.setItem(STORAGE_KEY, inputPass);
+                        showPage();
+                    } else {
+                        alert("密碼錯誤！");
+                        window.location.href = "https://www.google.com";
+                    }
+                }
             }
+
+            function showPage() {
+                window.onload = function() { 
+                    document.body.style.display = 'flex'; 
+                };
+            }
+
+            window.logout = function() {
+                localStorage.removeItem(STORAGE_KEY);
+                location.reload();
+            };
+
+            checkAuth();
         })();
+
         function openV(url, id) {
             document.getElementById('row-'+id).style.opacity = '0.3';
             document.getElementById('ifr').src = url;
@@ -51,7 +78,8 @@
     <div class="container">
         <header>
             <h1>🎟️ 我的電子商品券</h1>
-            <div style="font-size: 0.75rem; opacity: 0.7; margin-top: 8px;">最後更新：2026-04-28 02:05</div>
+            <div style="font-size: 0.75rem; opacity: 0.7; margin-top: 8px;">最後更新：2026-05-03 12:32</div>
+            <span class="logout-btn" onclick="logout()">登出/清除密碼</span>
         </header>
         <div class="list-card">
             <table>
@@ -143,39 +171,23 @@
         <tr id="row-11" style="background-color: #fef9c3;">
             <td style="text-align:center;">11</td>
             <td>
-                <span class="item-name">萊爾富 HL普普風抽取式衛生紙 110抽*8包 好禮即享券</span>
-                <span class="expiry-label">2026.05.02</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=d38cf69c-09ae-47f5-97d7-6b292b521edc', '11')">查看</button></td>
-        </tr>
-        <tr id="row-12" style="background-color: #fef9c3;">
-            <td style="text-align:center;">12</td>
-            <td>
-                <span class="item-name">萊爾富 HL普普風抽取式衛生紙 110抽*8包 好禮即享券</span>
-                <span class="expiry-label">2026.05.02</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=e9abe600-3ece-47ba-91ee-db63940c1bc8', '12')">查看</button></td>
-        </tr>
-        <tr id="row-13" style="background-color: #ffe4e6;">
-            <td style="text-align:center;">13</td>
-            <td>
                 <span class="item-name">萊爾富可樂果豌豆酥原味/酷辣好禮即享券</span>
                 <span class="expiry-label">2026.06.19</span>
             </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=d50d1943-d03a-425c-8c00-4f8e2719377c', '13')">查看</button></td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=d50d1943-d03a-425c-8c00-4f8e2719377c', '11')">查看</button></td>
         </tr>
-        <tr id="row-14" style="background-color: #f3e8ff;">
-            <td style="text-align:center;">14</td>
+        <tr id="row-12" style="background-color: #ffe4e6;">
+            <td style="text-align:center;">12</td>
             <td>
                 <span class="item-name">麥當勞勁辣鷄腿堡 好禮即享券</span>
                 <span class="expiry-label">2026.06.19</span>
             </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=fe82e970-8dbb-4ab4-b33a-8655ccb1b7b1', '14')">查看</button></td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=fe82e970-8dbb-4ab4-b33a-8655ccb1b7b1', '12')">查看</button></td>
         </tr>
                 </tbody>
             </table>
         </div>
-        <div class="footer-info">剩餘可用： <span style="color:var(--primary); font-size: 1.8rem;">14</span> 張</div>
+        <div class="footer-info">剩餘可用： <span style="color:var(--primary); font-size: 1.8rem;">12</span> 張</div>
     </div>
     <div id="modal" onclick="if(event.target==this)closeV()">
         <div id="m-cont">
