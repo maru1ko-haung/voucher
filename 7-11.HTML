@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的茶裏王票券夾 (雙條碼版)</title>
+    <style>
+        body { 
+            font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; 
+            background-color: #f0f2f5; margin: 0; padding: 20px;
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;
+        }
+        .ticket { 
+            background: #fff; width: 340px; border-radius: 16px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+            overflow: hidden; border: 1px solid #e0e0e0;
+        }
+        .header { 
+            background: #e60012; color: white; padding: 12px; 
+            text-align: center; font-weight: bold; font-size: 15px;
+        }
+        .body { padding: 20px; text-align: center; }
+        .prod-img { 
+            width: 100px; height: 100px; object-fit: contain; 
+            margin-bottom: 10px; border-radius: 10px;
+        }
+        .prod-title { font-size: 18px; font-weight: 900; color: #333; margin-bottom: 5px; }
+        .acc-tag { 
+            display: inline-block; background: #eee; color: #666; 
+            padding: 2px 10px; border-radius: 20px; font-size: 12px; margin-bottom: 15px;
+        }
+        .code-box { 
+            background: #fff; border: 1.5px solid #eee; border-radius: 10px; padding: 15px;
+        }
+        .barcode-img {
+            width: 100%;
+            height: 70px;
+            margin-bottom: 5px;
+        }
+        .label { font-size: 11px; color: #999; margin-bottom: 4px; font-weight: bold; }
+        .num { font-family: monospace; font-size: 14px; font-weight: bold; color: #000; margin-bottom: 10px; }
+        .sep { margin: 15px 0; border-top: 1px dashed #ccc; }
+        .footer { font-size: 12px; color: #ff4d4d; margin-top: 15px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<script>
+// 從你的 Log 提取的 19 組數據 
+const tickets = [
+    {acc: "丸0123", c1: "7500093109234224", c2: "4786NJCJ"},
+    {acc: "丸0900132756", c1: "7500093109237020", c2: "90SKT9GG"},
+    {acc: "丸0903969465", c1: "7500093109192012", c2: "OVG1RD20"},
+    {acc: "丸0905246327", c1: "7500093109212210", c2: "HLI9RC1T"},
+    {acc: "丸0906087810", c1: "7500093109142861", c2: "TRG0OPQC"},
+    {acc: "丸0909681595", c1: "7500093109244227", c2: "7IREFJJL"},
+    {acc: "丸0911921738", c1: "7500093109219670", c2: "RAYFTDM2"},
+    {acc: "丸0916334169", c1: "7500093109169906", c2: "HD4JOR6F"},
+    {acc: "丸0926909756", c1: "7500093109335234", c2: "61752DHS"},
+    {acc: "丸0952218216", c1: "7500093109234224", c2: "4786NJCJ"},
+    {acc: "丸0960633454", c1: "7500093109207551", c2: "YMHN0NJ5"},
+    {acc: "丸0965186198", c1: "7500093109129019", c2: "G7K6U5WH"},
+    {acc: "丸0965314778", c1: "7500093109285567", c2: "33NWMMCR"},
+    {acc: "丸0966824396", c1: "7500093109160643", c2: "X6VP7U42"},
+    {acc: "丸0971260012", c1: "7500093109409679", c2: "HJAXY7SI"},
+    {acc: "丸0975546910", c1: "7500093109388585", c2: "TMQE3008"},
+    {acc: "丸0989721451", c1: "7500093109064005", c2: "BPP75PV2"},
+    {acc: "丸0989728779", c1: "7500093109267785", c2: "YUCUMUWB"},
+    {acc: "丸0989809544", c1: "7500093109120847", c2: "J6YBRSYL"}
+];
+
+const imgUrl = "https://cdn.uniopen.com/coupons/MOD_COUPON_288x288_1773717010183.png";
+const expire = "2026-05-07 23:59:00";
+
+tickets.forEach(t => {
+    // 生成 c1 的長條碼
+    const barcodeC1 = `https://bwipjs-api.metafloor.com/?bcid=code128&text=${t.c1}&scale=2&rotate=N`;
+    // 生成 c2 的長條碼 (同樣使用 Code 128)
+    const barcodeC2 = `https://bwipjs-api.metafloor.com/?bcid=code128&text=${t.c2}&scale=2&rotate=N`;
+
+    document.write(`
+    <div class="ticket">
+        <div class="header">04 / 08【週三 i 好康】</div>
+        <div class="body">
+            <img src="${imgUrl}" class="prod-img">
+            <div class="prod-title">茶裏王伯爵紅茶600ml</div>
+            <div class="acc-tag">帳號: ${t.acc}</div>
+            <div class="code-box">
+                <div class="label">主條碼 (c1)</div>
+                <img src="${barcodeC1}" class="barcode-img">
+                <div class="num">${t.c1}</div>
+                
+                <div class="sep"></div>
+                
+                <div class="label">備用代碼條碼 (c2)</div>
+                <img src="${barcodeC2}" class="barcode-img">
+                <div class="num">${t.c2}</div>
+            </div>
+            <div class="footer">有效期至: ${expire} </div>
+        </div>
+    </div>
+    `);
+});
+</script>
+
+</body>
+</html>
