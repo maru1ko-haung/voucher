@@ -1,251 +1,626 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOMO 私人票券庫 (無痕版)</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="robots" content="noindex, nofollow">
+    <title>我的電子商品券</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: -apple-system, system-ui; background: #F2F2F7; margin:0; user-select: none; }
-
-        /* 🔒 鎖定畫面 */
-        #lock-screen {
-            position: fixed; width:100%; height:100%;
-            background:#F2F2F7;
-            display:flex; align-items:center; justify-content:center;
-            z-index: 999;
-        }
-        .lock-box {
-            background:white; padding:30px; border-radius:20px;
-            text-align:center; width:80%; max-width: 300px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-        input { width:90%; padding:15px; margin:20px 0; font-size:18px; text-align:center; border:1px solid #ddd; border-radius:10px; }
-        button { padding:15px; width:100%; border:none; background:#007AFF; color:white; border-radius:10px; cursor:pointer; font-weight:bold; }
-        button:active { background:#0051a7; }
-
-        /* 主畫面 */
-        #main-wrapper { display:none; }
-        .container { padding:10px; }
-        table { width:100%; background:white; border-radius:12px; border-collapse: collapse; overflow: hidden; }
-        td, th { padding:12px 10px; text-align:center; border-bottom: 1px solid #eee; }
-        th { background: #f8f8f8; font-size: 14px; }
-
-        /* 狀態樣式 */
-        .row-opened { background-color: #F2F2F7 !important; color: #AEAEB2; }
-        .opened-tag { font-size: 10px; color: #8E8E93; font-weight: normal; }
-        .item-info { text-align:left; line-height: 1.4; }
-        .tag-danger { color:#FF3B30; font-weight: bold; }
-        .tag-warning { color:#FF9500; }
-        .emoji-btn { font-size:26px; cursor:pointer; }
-
-        /* ✅ 顯示視窗 */
-        #display-zone {
-            display:none;
-            position: fixed; top:0; left:0; width:100%; height:100%;
-            background:rgba(255,255,255,0.95); z-index: 1000;
-            flex-direction: column; align-items: center; justify-content: center;
-        }
-        .qr-fixed-box { width:180px; aspect-ratio:1/1; margin: 10px auto; background:#fff; border: 1px solid #eee; }
-        #img-qr { display:block; width:100%; height:100%; object-fit:contain; }
-        .bar-container { width: 220px; margin: 10px auto; }
-        #img-bar { width:100%; height:auto; display:block; }
-        .code-box { font-family:monospace; font-size:20px; margin:20px; padding: 15px; background: #eee; border-radius: 8px; letter-spacing: 1px; }
-        .close-btn { background:#8E8E93; width:150px; margin-top: 20px; }
+        :root { --primary: #2563eb; --secondary: #1e293b; --bg: #f8fafc; }
+        body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); margin: 0; padding: 15px; display: none; justify-content: center; }
+        .container { width: 100%; max-width: 600px; }
+        header { background: var(--secondary); color: white; padding: 25px; border-radius: 20px; text-align: center; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        header h1 { margin: 0; font-size: 1.5rem; }
+        .list-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #f1f5f9; padding: 12px; font-size: 0.8rem; color: #64748b; text-align: left; }
+        td { padding: 16px 12px; border-bottom: 1px solid rgba(0,0,0,0.05); font-size: 0.9rem; }
+        .item-name { font-weight: 700; color: #334155; line-height: 1.4; display: block; }
+        .expiry-label { color: #e11d48; font-weight: bold; background: white; padding: 2px 6px; border-radius: 4px; font-family: monospace; border: 1px solid rgba(0,0,0,0.1); font-size: 0.75rem; }
+        .btn-use { background: var(--primary); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .footer-info { background: white; margin-top: 20px; padding: 25px; border-radius: 20px; text-align: center; border: 2px dashed #cbd5e1; font-weight: bold; font-size: 1.2rem; color: #475569; }
+        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.9); z-index: 100; backdrop-filter: blur(4px); }
+        #m-cont { position: absolute; top: 5%; left: 5%; width: 90%; height: 90%; background: white; border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; }
+        #m-head { padding: 12px; background: #f8fafc; text-align: right; border-bottom: 1px solid #eee; }
+        #close-btn { padding: 8px 20px; background: #e11d48; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        iframe { flex: 1; border: none; width: 100%; }
     </style>
+    <script>
+        (function() {
+            const pass = prompt("請輸入提取密碼：");
+            if (pass === "2724203") {
+                window.onload = function() { document.body.style.display = 'flex'; };
+            } else {
+                alert("密碼錯誤！");
+                window.location.href = "https://www.google.com";
+            }
+        })();
+        function openV(url, id) {
+            document.getElementById('row-'+id).style.opacity = '0.3';
+            document.getElementById('ifr').src = url;
+            document.getElementById('modal').style.display = 'block';
+        }
+        function closeV() {
+            document.getElementById('modal').style.display = 'none';
+            document.getElementById('ifr').src = '';
+        }
+    </script>
 </head>
 <body>
-
-<div id="lock-screen">
-    <div class="lock-box">
-        <h2 style="margin-top:0;">MOMO Wallet</h2>
-        <p style="color: #8E8E93; font-size: 14px;">請輸入存取密碼</p>
-        <input type="password" id="pw-input" inputmode="numeric" placeholder="密碼">
-        <button onclick="unlock()">解鎖進庫</button>
-    </div>
-</div>
-
-<div id="main-wrapper">
-    <div id="display-zone">
-        <h3 id="p-title" style="padding:0 30px; text-align:center; color:#333;"></h3>
-        <div class="qr-fixed-box"><img id="img-qr"></div>
-        <div class="bar-container"><img id="img-bar"></div>
-        <div id="p-code" class="code-box" onclick="copyValue()"></div>
-        <p style="font-size:12px; color:#8E8E93;">點擊序號可複製</p>
-        <button class="close-btn" onclick="$('#display-zone').css('display','none')">關閉視窗</button>
-    </div>
-
     <div class="container">
-        <h3 id="title" style="margin-left: 5px;"></h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>到期日</th>
-                    <th>票券名稱</th>
-                    <th>查看</th>
-                </tr>
-            </thead>
-            <tbody id="ticket-list"></tbody>
-        </table>
-        <div style="text-align: center; margin: 30px;">
-            <button style="background:#FF3B30; width: 150px;" onclick="location.reload()">手動鎖定 (F5)</button>
+        <header>
+            <h1>🎟️ 我的電子商品券</h1>
+            <div style="font-size: 0.75rem; opacity: 0.7; margin-top: 8px;">最後更新：2026-09-10 07:33</div>
+        </header>
+        <div class="list-card">
+            <table>
+                <thead>
+                    <tr><th width="10%">#</th><th width="65%">品項與效期</th><th width="25%">操作</th></tr>
+                </thead>
+                <tbody>
+
+        <tr id="row-1" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">1</td>
+            <td>
+                <span class="item-name">85度C 35元飲品好禮即享券</span>
+                <span class="expiry-label">2026.12.26</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=a9e6a40f-9ec1-4a8a-96ad-674315c08767', '1')">查看</button></td>
+        </tr>
+        <tr id="row-2" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">2</td>
+            <td>
+                <span class="item-name">85度C 35元飲品好禮即享券</span>
+                <span class="expiry-label">2027.01.05</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=cfdee617-bbc8-4989-9c60-c336e92e4829', '2')">查看</button></td>
+        </tr>
+        <tr id="row-3" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">3</td>
+            <td>
+                <span class="item-name">85度C 35元飲品好禮即享券</span>
+                <span class="expiry-label">2027.01.08</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=43a97d29-9be9-4118-a67c-60acf7f5863e', '3')">查看</button></td>
+        </tr>
+        <tr id="row-4" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">4</td>
+            <td>
+                <span class="item-name">85度C 35元飲品好禮即享券</span>
+                <span class="expiry-label">2027.01.08</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=c97bdeb0-b34b-4377-9693-f70b2fceee68', '4')">查看</button></td>
+        </tr>
+        <tr id="row-5" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">5</td>
+            <td>
+                <span class="item-name">85度C 35元飲品好禮即享券</span>
+                <span class="expiry-label">2027.01.12</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=0ae55245-f439-430a-9825-9ef21a59218d', '5')">查看</button></td>
+        </tr>
+        <tr id="row-6" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">6</td>
+            <td>
+                <span class="item-name">85度C 35元飲品好禮即享券</span>
+                <span class="expiry-label">2027.01.12</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=77b1338f-b6f0-410c-8294-299f516a4e05', '6')">查看</button></td>
+        </tr>
+        <tr id="row-7" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">7</td>
+            <td>
+                <span class="item-name">85度C 35元飲品好禮即享券</span>
+                <span class="expiry-label">2027.01.12</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=aea4b8d8-fd90-485a-8c6a-d5fab5f5fccf', '7')">查看</button></td>
+        </tr>
+        <tr id="row-8" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">8</td>
+            <td>
+                <span class="item-name">85度C 35元飲品好禮即享券</span>
+                <span class="expiry-label">2027.01.12</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=f21d2d59-20d4-46e7-abad-e0cd12537796', '8')">查看</button></td>
+        </tr>
+        <tr id="row-9" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">9</td>
+            <td>
+                <span class="item-name">85度C 35元飲品好禮即享券</span>
+                <span class="expiry-label">2027.01.12</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=f658ab07-10f8-4042-8f35-4f9f118a7b69', '9')">查看</button></td>
+        </tr>
+        <tr id="row-10" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">10</td>
+            <td>
+                <span class="item-name">85度C 35元飲品好禮即享券</span>
+                <span class="expiry-label">2027.01.18</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=4b6a392e-e704-438e-9b08-65b9ad11b70f', '10')">查看</button></td>
+        </tr>
+        <tr id="row-11" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">11</td>
+            <td>
+                <span class="item-name">85度C 35元飲品好禮即享券</span>
+                <span class="expiry-label">2027.01.18</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=aa658532-24c3-4305-ae1a-6b41390491f3', '11')">查看</button></td>
+        </tr>
+        <tr id="row-12" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">12</td>
+            <td>
+                <span class="item-name">85度C 35元飲品好禮即享券</span>
+                <span class="expiry-label">2027.01.18</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=ed4ad4b4-5e74-450a-ae81-669ddb7bcd57', '12')">查看</button></td>
+        </tr>
+        <tr id="row-13" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">13</td>
+            <td>
+                <span class="item-name">85度C 35元飲品好禮即享券</span>
+                <span class="expiry-label">2027.02.02</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=6919eb19-171e-4e51-96f1-56d211fb8a51', '13')">查看</button></td>
+        </tr>
+        <tr id="row-14" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">14</td>
+            <td>
+                <span class="item-name">85度C 35元飲品好禮即享券</span>
+                <span class="expiry-label">2027.02.12</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=1103c485-7689-4062-b833-4c26775fc780', '14')">查看</button></td>
+        </tr>
+        <tr id="row-15" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">15</td>
+            <td>
+                <span class="item-name">85度C 35元飲品好禮即享券</span>
+                <span class="expiry-label">2027.02.12</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=65d95964-ed6f-4516-88b4-c39e51095047', '15')">查看</button></td>
+        </tr>
+        <tr id="row-16" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">16</td>
+            <td>
+                <span class="item-name">85度C 35元飲品好禮即享券</span>
+                <span class="expiry-label">2027.02.12</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=a473983f-767b-4a90-b595-d1bc26f39264', '16')">查看</button></td>
+        </tr>
+        <tr id="row-17" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">17</td>
+            <td>
+                <span class="item-name">85度C 35元飲品好禮即享券</span>
+                <span class="expiry-label">2027.02.14</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=30b0be3c-5ee9-41c6-b598-8b8506dacc0a', '17')">查看</button></td>
+        </tr>
+        <tr id="row-18" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">18</td>
+            <td>
+                <span class="item-name">85度C 35元飲品好禮即享券</span>
+                <span class="expiry-label">2027.02.14</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=487243cf-d2dd-4748-ba32-e798f8c74953', '18')">查看</button></td>
+        </tr>
+        <tr id="row-19" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">19</td>
+            <td>
+                <span class="item-name">85度C 35元飲品好禮即享券</span>
+                <span class="expiry-label">2027.02.23</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=33f0a178-6efe-4bed-8035-2b07ae62e61c', '19')">查看</button></td>
+        </tr>
+        <tr id="row-20" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">20</td>
+            <td>
+                <span class="item-name">85度C 35元飲品好禮即享券</span>
+                <span class="expiry-label">2027.02.27</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=17a24c19-07d5-478f-991a-99cf9129da45', '20')">查看</button></td>
+        </tr>
+        <tr id="row-21" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">21</td>
+            <td>
+                <span class="item-name">85度C 35元飲品好禮即享券</span>
+                <span class="expiry-label">2027.02.27</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=efb752d5-abbe-47f4-bdc1-f3ab2c1489b1', '21')">查看</button></td>
+        </tr>
+        <tr id="row-22" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">22</td>
+            <td>
+                <span class="item-name">85度C 35元飲品好禮即享券</span>
+                <span class="expiry-label">2027.02.27</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=f783a867-6733-4dcb-b8b1-039ef4a2162b', '22')">查看</button></td>
+        </tr>
+        <tr id="row-23" style="background-color: #dcfce7;">
+            <td style="text-align:center;">23</td>
+            <td>
+                <span class="item-name">85度C 50元飲品好禮即享券</span>
+                <span class="expiry-label">2027.01.02</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=75f63cee-e60e-459c-9830-8140f380d2bc', '23')">查看</button></td>
+        </tr>
+        <tr id="row-24" style="background-color: #dcfce7;">
+            <td style="text-align:center;">24</td>
+            <td>
+                <span class="item-name">85度C 50元飲品好禮即享券</span>
+                <span class="expiry-label">2027.01.12</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=0a0b5ad1-9f30-4827-b525-ad6192ce2a9e', '24')">查看</button></td>
+        </tr>
+        <tr id="row-25" style="background-color: #dcfce7;">
+            <td style="text-align:center;">25</td>
+            <td>
+                <span class="item-name">85度C 50元飲品好禮即享券</span>
+                <span class="expiry-label">2027.01.12</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=38622771-5d97-41d2-b831-b22fa5091bd2', '25')">查看</button></td>
+        </tr>
+        <tr id="row-26" style="background-color: #dcfce7;">
+            <td style="text-align:center;">26</td>
+            <td>
+                <span class="item-name">85度C 50元飲品好禮即享券</span>
+                <span class="expiry-label">2027.01.18</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=333b3a62-7bb3-48e6-84fb-b1bcc7f301a5', '26')">查看</button></td>
+        </tr>
+        <tr id="row-27" style="background-color: #dcfce7;">
+            <td style="text-align:center;">27</td>
+            <td>
+                <span class="item-name">85度C 50元飲品好禮即享券</span>
+                <span class="expiry-label">2027.01.18</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=375bf7bf-e78e-4ccc-95bc-888b332fbe49', '27')">查看</button></td>
+        </tr>
+        <tr id="row-28" style="background-color: #fef9c3;">
+            <td style="text-align:center;">28</td>
+            <td>
+                <span class="item-name">85度C 55元飲品好禮即享券</span>
+                <span class="expiry-label">2027.02.26</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=f2467d57-ca78-45ae-a043-1a4fe092e842', '28')">查看</button></td>
+        </tr>
+        <tr id="row-29" style="background-color: #ffe4e6;">
+            <td style="text-align:center;">29</td>
+            <td>
+                <span class="item-name">85度C 60元飲品好禮即享券</span>
+                <span class="expiry-label">2027.01.02</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=1666f681-e87f-4a3e-9ffd-bc66b18314df', '29')">查看</button></td>
+        </tr>
+        <tr id="row-30" style="background-color: #ffe4e6;">
+            <td style="text-align:center;">30</td>
+            <td>
+                <span class="item-name">85度C 60元飲品好禮即享券</span>
+                <span class="expiry-label">2027.01.08</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=8611d762-94f1-4c08-85c9-a4241538bbc1', '30')">查看</button></td>
+        </tr>
+        <tr id="row-31" style="background-color: #ffe4e6;">
+            <td style="text-align:center;">31</td>
+            <td>
+                <span class="item-name">85度C 60元飲品好禮即享券</span>
+                <span class="expiry-label">2027.01.12</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=b00c0d4f-1649-47a2-ab7a-2bdba793032f', '31')">查看</button></td>
+        </tr>
+        <tr id="row-32" style="background-color: #ffe4e6;">
+            <td style="text-align:center;">32</td>
+            <td>
+                <span class="item-name">85度C 60元飲品好禮即享券</span>
+                <span class="expiry-label">2027.02.26</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=870d8d50-9325-4193-babc-f571e681d937', '32')">查看</button></td>
+        </tr>
+        <tr id="row-33" style="background-color: #f3e8ff;">
+            <td style="text-align:center;">33</td>
+            <td>
+                <span class="item-name">85度C 65元飲品好禮即享券</span>
+                <span class="expiry-label">2026.12.24</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=74ad9130-2213-4782-8a16-adf296ba5467', '33')">查看</button></td>
+        </tr>
+        <tr id="row-34" style="background-color: #f3e8ff;">
+            <td style="text-align:center;">34</td>
+            <td>
+                <span class="item-name">85度C 65元飲品好禮即享券</span>
+                <span class="expiry-label">2026.12.24</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=c7bf3c10-0f6f-468c-a470-07380e99fa77', '34')">查看</button></td>
+        </tr>
+        <tr id="row-35" style="background-color: #f3e8ff;">
+            <td style="text-align:center;">35</td>
+            <td>
+                <span class="item-name">85度C 65元飲品好禮即享券</span>
+                <span class="expiry-label">2026.12.29</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=a8dc9671-eb6e-43e9-86a1-940c4472ae9a', '35')">查看</button></td>
+        </tr>
+        <tr id="row-36" style="background-color: #f3e8ff;">
+            <td style="text-align:center;">36</td>
+            <td>
+                <span class="item-name">85度C 65元飲品好禮即享券</span>
+                <span class="expiry-label">2026.12.29</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=aecb0752-c320-48a7-bc4a-819998dba721', '36')">查看</button></td>
+        </tr>
+        <tr id="row-37" style="background-color: #f3e8ff;">
+            <td style="text-align:center;">37</td>
+            <td>
+                <span class="item-name">85度C 65元飲品好禮即享券</span>
+                <span class="expiry-label">2026.12.29</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=f40f18fe-6566-46a6-a448-af72ac7b0d50', '37')">查看</button></td>
+        </tr>
+        <tr id="row-38" style="background-color: #f3e8ff;">
+            <td style="text-align:center;">38</td>
+            <td>
+                <span class="item-name">85度C 65元飲品好禮即享券</span>
+                <span class="expiry-label">2027.02.19</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=9c0e17c8-74d3-449f-af4d-e2e31901b67d', '38')">查看</button></td>
+        </tr>
+        <tr id="row-39" style="background-color: #ffedd5;">
+            <td style="text-align:center;">39</td>
+            <td>
+                <span class="item-name">85度C 68元切片蛋糕好禮即享券</span>
+                <span class="expiry-label">2027.01.18</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=404ec4fa-c2f3-460f-b696-ad87c0c1ace7', '39')">查看</button></td>
+        </tr>
+        <tr id="row-40" style="background-color: #ffedd5;">
+            <td style="text-align:center;">40</td>
+            <td>
+                <span class="item-name">85度C 68元切片蛋糕好禮即享券</span>
+                <span class="expiry-label">2027.02.19</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=96f9009a-0636-4208-88a4-05a9420c5f07', '40')">查看</button></td>
+        </tr>
+        <tr id="row-41" style="background-color: #ccfbf1;">
+            <td style="text-align:center;">41</td>
+            <td>
+                <span class="item-name">85度C 58元切片蛋糕好禮即享券</span>
+                <span class="expiry-label">2026.12.11</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=afe32448-dc53-41e3-8b02-730c3464b23b', '41')">查看</button></td>
+        </tr>
+        <tr id="row-42" style="background-color: #ccfbf1;">
+            <td style="text-align:center;">42</td>
+            <td>
+                <span class="item-name">85度C 58元切片蛋糕好禮即享券</span>
+                <span class="expiry-label">2027.01.12</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=1e0491ae-2d3a-45e7-93f6-d2d8ddef8282', '42')">查看</button></td>
+        </tr>
+        <tr id="row-43" style="background-color: #ccfbf1;">
+            <td style="text-align:center;">43</td>
+            <td>
+                <span class="item-name">85度C 58元切片蛋糕好禮即享券</span>
+                <span class="expiry-label">2027.01.12</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=60a36ab2-31ab-4899-8152-5f080853b463', '43')">查看</button></td>
+        </tr>
+        <tr id="row-44" style="background-color: #ccfbf1;">
+            <td style="text-align:center;">44</td>
+            <td>
+                <span class="item-name">85度C 58元切片蛋糕好禮即享券</span>
+                <span class="expiry-label">2027.01.18</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=b8e5a920-7b5b-42cd-aedb-a9956e510e3f', '44')">查看</button></td>
+        </tr>
+        <tr id="row-45" style="background-color: #e0e7ff;">
+            <td style="text-align:center;">45</td>
+            <td>
+                <span class="item-name">85度Ｃ 50元切片蛋糕好禮即享券</span>
+                <span class="expiry-label">2026.12.17</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=08d35863-affd-41da-8c14-e97166c6dc1c', '45')">查看</button></td>
+        </tr>
+        <tr id="row-46" style="background-color: #e0e7ff;">
+            <td style="text-align:center;">46</td>
+            <td>
+                <span class="item-name">85度Ｃ 50元切片蛋糕好禮即享券</span>
+                <span class="expiry-label">2026.12.17</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=5251cb04-2304-47fe-9cbc-2d4c0d38e21e', '46')">查看</button></td>
+        </tr>
+        <tr id="row-47" style="background-color: #e0e7ff;">
+            <td style="text-align:center;">47</td>
+            <td>
+                <span class="item-name">85度Ｃ 50元切片蛋糕好禮即享券</span>
+                <span class="expiry-label">2026.12.17</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=9bd57d65-15cd-487f-b307-cdba5a35a2f9', '47')">查看</button></td>
+        </tr>
+        <tr id="row-48" style="background-color: #e0e7ff;">
+            <td style="text-align:center;">48</td>
+            <td>
+                <span class="item-name">85度Ｃ 50元切片蛋糕好禮即享券</span>
+                <span class="expiry-label">2026.12.17</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=fa708077-5901-47b7-b1f8-e686d841074a', '48')">查看</button></td>
+        </tr>
+        <tr id="row-49" style="background-color: #e0e7ff;">
+            <td style="text-align:center;">49</td>
+            <td>
+                <span class="item-name">85度Ｃ 50元切片蛋糕好禮即享券</span>
+                <span class="expiry-label">2026.12.29</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=58883d4f-dbd1-47b5-9e1a-2b1876ee047d', '49')">查看</button></td>
+        </tr>
+        <tr id="row-50" style="background-color: #e0e7ff;">
+            <td style="text-align:center;">50</td>
+            <td>
+                <span class="item-name">85度Ｃ 50元切片蛋糕好禮即享券</span>
+                <span class="expiry-label">2027.01.12</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=9b88f71c-0124-4527-abe0-1c7eb079545f', '50')">查看</button></td>
+        </tr>
+        <tr id="row-51" style="background-color: #e0e7ff;">
+            <td style="text-align:center;">51</td>
+            <td>
+                <span class="item-name">85度Ｃ 50元切片蛋糕好禮即享券</span>
+                <span class="expiry-label">2027.01.12</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=a832bc04-7a05-4413-9be6-0e5d928e297f', '51')">查看</button></td>
+        </tr>
+        <tr id="row-52" style="background-color: #e0e7ff;">
+            <td style="text-align:center;">52</td>
+            <td>
+                <span class="item-name">85度Ｃ 50元切片蛋糕好禮即享券</span>
+                <span class="expiry-label">2027.01.18</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=2418090c-25ed-4a7f-9424-41868631b5a6', '52')">查看</button></td>
+        </tr>
+        <tr id="row-53" style="background-color: #e0e7ff;">
+            <td style="text-align:center;">53</td>
+            <td>
+                <span class="item-name">85度Ｃ 50元切片蛋糕好禮即享券</span>
+                <span class="expiry-label">2027.02.06</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=6bab3b91-22ca-43b1-887a-586580fb41a1', '53')">查看</button></td>
+        </tr>
+        <tr id="row-54" style="background-color: #e0e7ff;">
+            <td style="text-align:center;">54</td>
+            <td>
+                <span class="item-name">85度Ｃ 50元切片蛋糕好禮即享券</span>
+                <span class="expiry-label">2027.02.19</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=8af57e54-26e7-4252-8365-a75ff0611729', '54')">查看</button></td>
+        </tr>
+        <tr id="row-55" style="background-color: #e0e7ff;">
+            <td style="text-align:center;">55</td>
+            <td>
+                <span class="item-name">85度Ｃ 50元切片蛋糕好禮即享券</span>
+                <span class="expiry-label">2027.02.22</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=8c5b0e62-cdeb-43e4-8c94-77581f6b96bb', '55')">查看</button></td>
+        </tr>
+        <tr id="row-56" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">56</td>
+            <td>
+                <span class="item-name">萊爾富光泉無加糖濃豆漿/濃黑豆漿4℃好禮即享券</span>
+                <span class="expiry-label">2026.12.02</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=057746f8-5fcc-4637-9a5d-d2ae9f58f3e6', '56')">查看</button></td>
+        </tr>
+        <tr id="row-57" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">57</td>
+            <td>
+                <span class="item-name">萊爾富光泉無加糖濃豆漿/濃黑豆漿4℃好禮即享券</span>
+                <span class="expiry-label">2026.12.04</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=8c23e16c-e26c-4b88-8cae-b5dabc35689d', '57')">查看</button></td>
+        </tr>
+        <tr id="row-58" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">58</td>
+            <td>
+                <span class="item-name">萊爾富光泉無加糖濃豆漿/濃黑豆漿4℃好禮即享券</span>
+                <span class="expiry-label">2026.12.04</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=c74ee665-4344-43ef-ba53-225ede9b35e9', '58')">查看</button></td>
+        </tr>
+        <tr id="row-59" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">59</td>
+            <td>
+                <span class="item-name">萊爾富光泉無加糖濃豆漿/濃黑豆漿4℃好禮即享券</span>
+                <span class="expiry-label">2026.12.04</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=ce2b3a2f-6582-4e07-9131-5aba7b205302', '59')">查看</button></td>
+        </tr>
+        <tr id="row-60" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">60</td>
+            <td>
+                <span class="item-name">萊爾富光泉無加糖濃豆漿/濃黑豆漿4℃好禮即享券</span>
+                <span class="expiry-label">2026.12.09</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=00be5024-374e-4bd8-8be7-cad633ecd9ac', '60')">查看</button></td>
+        </tr>
+        <tr id="row-61" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">61</td>
+            <td>
+                <span class="item-name">萊爾富光泉無加糖濃豆漿/濃黑豆漿4℃好禮即享券</span>
+                <span class="expiry-label">2026.12.09</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=ac59a00d-328c-4233-a315-8ac782f2de5a', '61')">查看</button></td>
+        </tr>
+        <tr id="row-62" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">62</td>
+            <td>
+                <span class="item-name">萊爾富光泉無加糖濃豆漿/濃黑豆漿4℃好禮即享券</span>
+                <span class="expiry-label">2026.12.10</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=2a0e7db3-6ecc-4742-bea4-8014fe63c358', '62')">查看</button></td>
+        </tr>
+        <tr id="row-63" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">63</td>
+            <td>
+                <span class="item-name">萊爾富光泉無加糖濃豆漿/濃黑豆漿4℃好禮即享券</span>
+                <span class="expiry-label">2026.12.10</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=556e6c9d-73da-460d-8a13-90487a89f1dd', '63')">查看</button></td>
+        </tr>
+        <tr id="row-64" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">64</td>
+            <td>
+                <span class="item-name">萊爾富光泉無加糖濃豆漿/濃黑豆漿4℃好禮即享券</span>
+                <span class="expiry-label">2026.12.10</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=bc0f0199-b444-401b-a73b-c7197bd5be8a', '64')">查看</button></td>
+        </tr>
+        <tr id="row-65" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">65</td>
+            <td>
+                <span class="item-name">萊爾富光泉無加糖濃豆漿/濃黑豆漿4℃好禮即享券</span>
+                <span class="expiry-label">2026.12.10</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=e03ad2b5-b96e-4891-9186-0efd0915f147', '65')">查看</button></td>
+        </tr>
+        <tr id="row-66" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">66</td>
+            <td>
+                <span class="item-name">萊爾富光泉無加糖濃豆漿/濃黑豆漿4℃好禮即享券</span>
+                <span class="expiry-label">2026.12.10</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=e650caa5-7da2-4a03-83f8-4f4d4c65eb6a', '66')">查看</button></td>
+        </tr>
+        <tr id="row-67" style="background-color: #e0f2fe;">
+            <td style="text-align:center;">67</td>
+            <td>
+                <span class="item-name">萊爾富光泉無加糖濃豆漿/濃黑豆漿4℃好禮即享券</span>
+                <span class="expiry-label">2026.12.10</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=eb8e84b7-cbdf-4afd-a4cd-f193c19927de', '67')">查看</button></td>
+        </tr>
+        <tr id="row-68" style="background-color: #dcfce7;">
+            <td style="text-align:center;">68</td>
+            <td>
+                <span class="item-name">萊爾富純喫茶650ml系列任選好禮即享券</span>
+                <span class="expiry-label">2026.10.24</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=e3c2a5c7-3854-4475-9814-11524c3aef70', '68')">查看</button></td>
+        </tr>
+        <tr id="row-69" style="background-color: #dcfce7;">
+            <td style="text-align:center;">69</td>
+            <td>
+                <span class="item-name">萊爾富純喫茶650ml系列任選好禮即享券</span>
+                <span class="expiry-label">2026.10.24</span>
+            </td>
+            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=f8d79c42-6ff6-4e25-bae4-cef31066ccdc', '69')">查看</button></td>
+        </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="footer-info">目前可用： <span style="color:var(--primary); font-size: 1.8rem;">69</span> 張</div>
+    </div>
+    <div id="modal" onclick="if(event.target==this)closeV()">
+        <div id="m-cont">
+            <div id="m-head"><button id="close-btn" onclick="closeV()">關閉視窗</button></div>
+            <iframe id="ifr" allow="geolocation; microphone; camera"></iframe>
         </div>
     </div>
-</div>
-
-<script>
-const CORRECT_PASS = "2724203";
-// 所有的狀態現在只存在變數中，重整即消失
-let sessionOpenedTickets = []; 
-
-const data = [
-    { id: 1, date: "2025-08-10", name: "【漢堡王】花生培根脆雞堡組合(過期)", code: "0107158673552685" },
-    { id: 2, date: "2025-08-11", name: "【漢堡王】花生培根脆雞堡組合(過期)", code: "0107158994241846" },
-    { id: 3, date: "2026-01-11", name: "【麥當勞】火腿蛋堡(過期)", code: "MDN9797305442418" },
-    { id: 4, date: "2026-03-12", name: "【85度C】35元飲品(過期)", code: "E1080621081546543300" },
-    { id: 5, date: "2026-03-13", name: "【肯德基】咔啦脆雞(過期)", code: "VKSP8030275092027183" },
-    { id: 6, date: "2026-03-20", name: "【21風味館】烤雞腿(過期)", code: "E206304448" },
-    { id: 7, date: "2026-04-16", name: "【85度C】50元飲品(過期)", code: "E1160436034978871805" },
-    { id: 8, date: "2026-04-26", name: "【85度C】35元飲品(過期)", code: "E1086913617208961724" },
-    { id: 66, date: "2026-06-30", name: "【蒜翻天】地瓜條/細薯條", code: "25371K51K68C" },
-    { id: 67, date: "2026-06-30", name: "【蒜翻天】地瓜條/細薯條", code: "25371R6N119B" },
-    { id: 68, date: "2026-06-30", name: "【蒜翻天】炸甜不辣_0909", code: "25371RX8571C" },
-    { id: 69, date: "2026-06-30", name: "【蒜翻天】炸甜不辣_0960", code: "25371YP34K3C" },
-    { id: 70, date: "2026-06-30", name: "【蒜翻天】炸甜不辣_0966", code: "25371QVX5DC7" },
-    { id: 71, date: "2026-06-30", name: "【蒜翻天】炸甜不辣_0989", code: "25371XB7JN6F" },
-    { id: 72, date: "2026-06-30", name: "【蒜翻天】炸甜不辣_5452", code: "253712Q18PF7" },
-    { id: 73, date: "2026-06-30", name: "【蒜翻天】蘿蔔糕/糯米腸", code: "253717543265" },
-    { id: 74, date: "2026-06-30", name: "【蒜翻天】蘿蔔糕/糯米腸", code: "25371D9XUV24" },
-    { id: 75, date: "2026-06-30", name: "【蒜翻天】蘿蔔糕/糯米腸", code: "25371LR1451B" },
-    { id: 76, date: "2026-06-30", name: "【蒜翻天】蘿蔔糕/糯米腸", code: "2537127UEP77" },
-    { id: 77, date: "2026-06-30", name: "【蒜翻天】蘿蔔糕/糯米腸", code: "25371U5TPFA5" },
-    { id: 78, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "253713B1576E" },
-    { id: 79, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "25371A9QUU3D" },
-    { id: 80, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "2537188UHR52" },
-    { id: 81, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "25371WN62Y86" },
-    { id: 82, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "25371331FPA4" },
-    { id: 83, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "25371386XHED" },
-    { id: 84, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "253712YA74A3" },
-    { id: 85, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "25371318M52E" },
-    { id: 86, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "253719F3QYDB" },
-    { id: 87, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "2537191CFHE9" },
-    { id: 88, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "253711K8DP37" },
-    { id: 89, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "253711E6G978" },
-    { id: 90, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "25371W883258" },
-    { id: 91, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "253719B6RBB1" },
-    { id: 92, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "25371V19CJ83" },
-    { id: 93, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "25371M4RP5F8" },
-    { id: 94, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "253717628552" },
-    { id: 95, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "253716556VFD" },
-    { id: 96, date: "2026-06-30", name: "【蒜翻天】豆干/花枝丸", code: "25371NP21L72" },
-    { id: 121, date: "2026-08-08", name: "【Mister Donut】一入甜甜圈", code: "428321960" },
-    { id: 122, date: "2026-08-25", name: "【21風味館】烤雞腿_0935", code: "E942229480" },
-    { id: 123, date: "2026-08-25", name: "【麥當勞】勁辣雞腿堡_0926", code: "MDN6627202066272" },
-    { id: 124, date: "2026-08-25", name: "【麥當勞】嫩煎雞腿堡_0952", code: "MDN9183789417545" },
-    { id: 147, date: "2026-10-25", name: "【85度C】99元切片蛋糕", code: "E3244038155836950360" },
-    { id: 148, date: "2026-10-25", name: "【麥當勞】嫩煎雞腿堡_0926", code: "MDN9580830462746" },
-];
-
-/* 🔓 1. 每次進網頁都要求密碼 (無 localStorage) */
-function unlock() {
-    const input = document.getElementById('pw-input').value;
-    if (input === CORRECT_PASS) {
-        showMain();
-    } else {
-        alert("密碼錯誤，存取拒絕");
-        document.getElementById('pw-input').value = "";
-    }
-}
-
-/* 鍵盤 Enter 支援 */
-document.getElementById('pw-input').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') unlock();
-});
-
-function showMain() {
-    document.getElementById('lock-screen').style.display='none';
-    document.getElementById('main-wrapper').style.display='block';
-    renderTickets();
-}
-
-/* 🚀 2. 排序並渲染清單 */
-function renderTickets() {
-    const today = new Date();
-    document.getElementById("title").innerHTML = 
-        `<span style="font-size:14px; color:#666;">${today.toLocaleDateString()}</span><br>有效票券：${data.length} 張`;
-
-    const sorted = [...data].sort((a,b)=>{
-        const da=new Date(a.date);
-        const db=new Date(b.date);
-        const diffA=(da-today)/86400000;
-        const diffB=(db-today)/86400000;
-        const p = d => d<0?4:d<=1?1:d<=7?2:3;
-        if(p(diffA)!==p(diffB)) return p(diffA)-p(diffB);
-        return da-db;
-    });
-
-    let html="";
-    sorted.forEach(item=>{
-        const d=new Date(item.date);
-        const diff=(d-today)/86400000;
-        const isOpened = sessionOpenedTickets.includes(item.id);
-
-        let tagClass = "";
-        let tagText = "";
-        if(diff<0) { tagClass="tag-danger"; tagText="❌過期"; }
-        else if(diff<=1) { tagClass="tag-danger"; tagText="🔥明天到期"; }
-        else if(diff<=7) { tagClass="tag-warning"; tagText="⚠️7天內"; }
-
-        html+=`
-        <tr id="row-${item.id}" class="${isOpened ? 'row-opened' : ''}">
-            <td style="font-size:12px; color:#999;">${item.id}</td>
-            <td style="font-size:13px;">${item.date}</td>
-            <td class="item-info">
-                <div style="font-weight:500;">${item.name}</div>
-                ${isOpened ? '<span class="opened-tag"> [已開啟]</span>' : ''}
-                <div class="${tagClass}" style="font-size:11px;">${tagText}</div>
-            </td>
-            <td><span class="emoji-btn" onclick="showTicket(${item.id}, '${item.code}','${item.name}')">🎫</span></td>
-        </tr>`;
-    });
-
-    document.getElementById('ticket-list').innerHTML=html;
-}
-
-/* 🎫 3. 顯示票券邏輯 (僅暫存於變數) */
-function showTicket(id, code, name){
-    if (!sessionOpenedTickets.includes(id)) {
-        sessionOpenedTickets.push(id);
-        renderTickets(); // 立即重新渲染顯示「已開」標記
-    }
-
-    $("#p-title").text(name);
-    $("#p-code").text(code);
-
-    // 生成條碼 URL
-    $("#img-qr").attr("src", `https://m.momoshop.com.tw/mymomo/ajaxProduceImage.jsp?code=${code}&type=0`);
-    $("#img-bar").attr("src", `https://m.momoshop.com.tw/mymomo/ajaxProduceImage.jsp?code=${code}&type=1`);
-
-    $("#display-zone").css("display", "flex");
-}
-
-/* 📋 4. 健壯複製功能 */
-function copyValue(){
-    const text = $("#p-code").text();
-    const textArea = document.createElement("textarea");
-    textArea.value = text;
-    document.body.appendChild(textArea);
-    textArea.select();
-    try {
-        document.execCommand('copy');
-        alert("代碼已複製到剪貼簿");
-    } catch (err) {
-        alert("複製失敗，請手動選取");
-    }
-    document.body.removeChild(textArea);
-}
-</script>
-
-</body>
-</html>
+</body></html>
