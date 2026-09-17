@@ -1,594 +1,579 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="robots" content="noindex, nofollow">
-    <title>我的電子商品券</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
-    <style>
-        :root { --primary: #2563eb; --secondary: #1e293b; --bg: #f8fafc; }
-        body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); margin: 0; padding: 15px; display: none; justify-content: center; }
-        .container { width: 100%; max-width: 600px; }
-        header { background: var(--secondary); color: white; padding: 25px; border-radius: 20px; text-align: center; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        header h1 { margin: 0; font-size: 1.5rem; }
-        .list-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        table { width: 100%; border-collapse: collapse; }
-        th { background: #f1f5f9; padding: 12px; font-size: 0.8rem; color: #64748b; text-align: left; }
-        td { padding: 16px 12px; border-bottom: 1px solid rgba(0,0,0,0.05); font-size: 0.9rem; }
-        .item-name { font-weight: 700; color: #334155; line-height: 1.4; display: block; }
-        .expiry-label { color: #e11d48; font-weight: bold; background: white; padding: 2px 6px; border-radius: 4px; font-family: monospace; border: 1px solid rgba(0,0,0,0.1); font-size: 0.75rem; }
-        .btn-use { background: var(--primary); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; }
-        .footer-info { background: white; margin-top: 20px; padding: 25px; border-radius: 20px; text-align: center; border: 2px dashed #cbd5e1; font-weight: bold; font-size: 1.2rem; color: #475569; }
-        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.9); z-index: 100; backdrop-filter: blur(4px); }
-        #m-cont { position: absolute; top: 5%; left: 5%; width: 90%; height: 90%; background: white; border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; }
-        #m-head { padding: 12px; background: #f8fafc; text-align: right; border-bottom: 1px solid #eee; }
-        #close-btn { padding: 8px 20px; background: #e11d48; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
-        iframe { flex: 1; border: none; width: 100%; }
-    </style>
-    <script>
-        (function() {
-            const pass = prompt("請輸入提取密碼：");
-            if (pass === "2724203") {
-                window.onload = function() { document.body.style.display = 'flex'; };
-            } else {
-                alert("密碼錯誤！");
-                window.location.href = "https://www.google.com";
-            }
-        })();
-        function openV(url, id) {
-            document.getElementById('row-'+id).style.opacity = '0.3';
-            document.getElementById('ifr').src = url;
-            document.getElementById('modal').style.display = 'block';
-        }
-        function closeV() {
-            document.getElementById('modal').style.display = 'none';
-            document.getElementById('ifr').src = '';
-        }
-    </script>
+    <title>PChome 24h購物 - 顧客中心 - 我的電子票券</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🎟️ 我的電子商品券</h1>
-            <div style="font-size: 0.75rem; opacity: 0.7; margin-top: 8px;">最後更新：2026-09-10 19:41</div>
-        </header>
-        <div class="list-card">
-            <table>
-                <thead>
-                    <tr><th width="10%">#</th><th width="65%">品項與效期</th><th width="25%">操作</th></tr>
-                </thead>
-                <tbody>
 
-        <tr id="row-1" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">1</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=4010bd72-1104-4cfa-9380-55be52129d53', '1')">查看</button></td>
-        </tr>
-        <tr id="row-2" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">2</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=4527cd07-8acf-437b-a3bc-16c431b68780', '2')">查看</button></td>
-        </tr>
-        <tr id="row-3" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">3</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=468ec8b4-8ae4-4add-9963-39f78e1aea2d', '3')">查看</button></td>
-        </tr>
-        <tr id="row-4" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">4</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=4cf00753-70c0-4a53-98e0-743d88ea9d94', '4')">查看</button></td>
-        </tr>
-        <tr id="row-5" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">5</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=50897927-e636-4665-ba3f-f80bf3554d57', '5')">查看</button></td>
-        </tr>
-        <tr id="row-6" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">6</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=53c5720d-64ca-4c6f-9e7d-d460a5f1ec40', '6')">查看</button></td>
-        </tr>
-        <tr id="row-7" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">7</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=59b40ef0-5dbc-498d-9e3e-4f0f3a20c85f', '7')">查看</button></td>
-        </tr>
-        <tr id="row-8" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">8</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=5a7f7963-1a49-4c37-aaca-4b71d15b8f6f', '8')">查看</button></td>
-        </tr>
-        <tr id="row-9" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">9</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=640afa79-79c1-423e-acb6-e141a07f4bb4', '9')">查看</button></td>
-        </tr>
-        <tr id="row-10" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">10</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=65dfacf1-2b93-4a2d-8034-8355b1c27a5b', '10')">查看</button></td>
-        </tr>
-        <tr id="row-11" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">11</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=675a7bf8-0684-4f0a-a98d-c615dfed1eef', '11')">查看</button></td>
-        </tr>
-        <tr id="row-12" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">12</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=67845ee5-8e76-44e3-9fad-29b87dc57dd1', '12')">查看</button></td>
-        </tr>
-        <tr id="row-13" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">13</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=691c4b49-b21f-46fb-bb73-4d83e25c8a5b', '13')">查看</button></td>
-        </tr>
-        <tr id="row-14" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">14</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=6b8e3c93-f3d8-4707-9582-9cef6e4bf8a1', '14')">查看</button></td>
-        </tr>
-        <tr id="row-15" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">15</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=6eb1483c-c5c3-4e90-b897-9b5eeaa6b803', '15')">查看</button></td>
-        </tr>
-        <tr id="row-16" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">16</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=7c961417-658f-4659-8e5c-5bf863701efa', '16')">查看</button></td>
-        </tr>
-        <tr id="row-17" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">17</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=a211e61d-87e2-4d22-b2b2-f4e97769b758', '17')">查看</button></td>
-        </tr>
-        <tr id="row-18" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">18</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=a3ede886-052a-4d53-9d6f-26b38a47c175', '18')">查看</button></td>
-        </tr>
-        <tr id="row-19" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">19</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=a97ee353-14ec-4a8b-bfd0-8bd47ca87d63', '19')">查看</button></td>
-        </tr>
-        <tr id="row-20" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">20</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=ac21cedf-d526-4b85-8d57-872a81f0c9cc', '20')">查看</button></td>
-        </tr>
-        <tr id="row-21" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">21</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=ae233074-bac1-4a0e-bb86-b9f3842ab5bd', '21')">查看</button></td>
-        </tr>
-        <tr id="row-22" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">22</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=b3a8c390-76e3-437b-9e78-093853fa6023', '22')">查看</button></td>
-        </tr>
-        <tr id="row-23" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">23</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=b99fbb8a-94b0-4a1d-ba60-d5757a296b5d', '23')">查看</button></td>
-        </tr>
-        <tr id="row-24" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">24</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=bd085e98-6bc5-4025-814b-771380f06565', '24')">查看</button></td>
-        </tr>
-        <tr id="row-25" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">25</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=bd2e63f2-55cd-4c5a-8437-5f45c6727edc', '25')">查看</button></td>
-        </tr>
-        <tr id="row-26" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">26</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=bdf6ed26-65ab-43d0-b733-2ab382918747', '26')">查看</button></td>
-        </tr>
-        <tr id="row-27" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">27</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=be513996-c62f-428a-915e-b0aedea46fc8', '27')">查看</button></td>
-        </tr>
-        <tr id="row-28" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">28</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=c0a03421-395d-4d44-addc-1c78ca4f6709', '28')">查看</button></td>
-        </tr>
-        <tr id="row-29" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">29</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=c2f87277-13b2-4b27-9f23-acd4480e2b6e', '29')">查看</button></td>
-        </tr>
-        <tr id="row-30" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">30</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=c4b6e045-692e-4655-93f3-88ff1e1197f7', '30')">查看</button></td>
-        </tr>
-        <tr id="row-31" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">31</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=c60adc37-47b1-47ca-bfe8-951dd1aa3432', '31')">查看</button></td>
-        </tr>
-        <tr id="row-32" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">32</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=cb5c7f2b-c3ce-41df-8d01-3e3dbc26eed2', '32')">查看</button></td>
-        </tr>
-        <tr id="row-33" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">33</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=ce8c541e-7048-4755-82f8-7e1d3e53fbd4', '33')">查看</button></td>
-        </tr>
-        <tr id="row-34" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">34</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=d03d36d1-1d69-4f1c-8016-e1661359b44d', '34')">查看</button></td>
-        </tr>
-        <tr id="row-35" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">35</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=d42da462-f4af-4945-8174-a4a0c1937dcf', '35')">查看</button></td>
-        </tr>
-        <tr id="row-36" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">36</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=dff96cb9-8fce-4f02-84b8-792004a24880', '36')">查看</button></td>
-        </tr>
-        <tr id="row-37" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">37</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=e0b17cc8-a5f9-4035-a7ce-59b08be852e1', '37')">查看</button></td>
-        </tr>
-        <tr id="row-38" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">38</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=e97340ff-ddf2-4599-905e-8869ff655a76', '38')">查看</button></td>
-        </tr>
-        <tr id="row-39" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">39</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=efad1312-1cb5-4a8e-9452-22cbfc0ffc92', '39')">查看</button></td>
-        </tr>
-        <tr id="row-40" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">40</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=f2a23eea-0def-41cd-aca5-9b7b953e5199', '40')">查看</button></td>
-        </tr>
-        <tr id="row-41" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">41</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=f3610de4-d56a-4469-89fc-aa997c77921d', '41')">查看</button></td>
-        </tr>
-        <tr id="row-42" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">42</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=f38d58e5-7a09-49c4-a967-5e9abb22626b', '42')">查看</button></td>
-        </tr>
-        <tr id="row-43" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">43</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=f46d0a04-c8ca-43f0-a05a-75b5e2ef89e8', '43')">查看</button></td>
-        </tr>
-        <tr id="row-44" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">44</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=f480d0c5-446a-4f56-85b5-72e8cc2f74f7', '44')">查看</button></td>
-        </tr>
-        <tr id="row-45" style="background-color: #e0f2fe;">
-            <td style="text-align:center;">45</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=fc3e6914-bad4-47c6-a314-2a58d9372baa', '45')">查看</button></td>
-        </tr>
-        <tr id="row-46" style="background-color: #dcfce7;">
-            <td style="text-align:center;">46</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式2杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=6e69da8f-185a-4d8f-996a-825b622a4983', '46')">查看</button></td>
-        </tr>
-        <tr id="row-47" style="background-color: #dcfce7;">
-            <td style="text-align:center;">47</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯拿鐵或大杯美式2杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=fc9f8576-c1f7-4d35-838c-3f08d2ebe9d7', '47')">查看</button></td>
-        </tr>
-        <tr id="row-48" style="background-color: #fef9c3;">
-            <td style="text-align:center;">48</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯美式或四季春青茶或經典紅茶1杯(冰/熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=22503429-d683-4e4e-bf09-734adcc4682f', '48')">查看</button></td>
-        </tr>
-        <tr id="row-49" style="background-color: #fef9c3;">
-            <td style="text-align:center;">49</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯美式或四季春青茶或經典紅茶1杯(冰/熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=401e6d60-af64-49f9-adb1-65ecae2bbde2', '49')">查看</button></td>
-        </tr>
-        <tr id="row-50" style="background-color: #fef9c3;">
-            <td style="text-align:center;">50</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯美式或四季春青茶或經典紅茶1杯(冰/熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=6a2bf38b-210c-41a8-aefa-49986764bd5d', '50')">查看</button></td>
-        </tr>
-        <tr id="row-51" style="background-color: #fef9c3;">
-            <td style="text-align:center;">51</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯美式或四季春青茶或經典紅茶1杯(冰/熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=757c3a39-cc06-4b44-ba9f-6364d85acdfc', '51')">查看</button></td>
-        </tr>
-        <tr id="row-52" style="background-color: #fef9c3;">
-            <td style="text-align:center;">52</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯美式或四季春青茶或經典紅茶1杯(冰/熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=93884322-070d-4b6e-b2ae-98065d20cf28', '52')">查看</button></td>
-        </tr>
-        <tr id="row-53" style="background-color: #fef9c3;">
-            <td style="text-align:center;">53</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯美式或四季春青茶或經典紅茶1杯(冰/熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=972b9412-9835-4ce8-a02b-ac0dc3baa75c', '53')">查看</button></td>
-        </tr>
-        <tr id="row-54" style="background-color: #fef9c3;">
-            <td style="text-align:center;">54</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯美式或四季春青茶或經典紅茶1杯(冰/熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=a2b8a5fe-a969-4a07-bd23-175236ab1e23', '54')">查看</button></td>
-        </tr>
-        <tr id="row-55" style="background-color: #fef9c3;">
-            <td style="text-align:center;">55</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯美式或四季春青茶或經典紅茶1杯(冰/熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=a680bf31-d1fb-49e4-ad3c-af6cfb06efc8', '55')">查看</button></td>
-        </tr>
-        <tr id="row-56" style="background-color: #fef9c3;">
-            <td style="text-align:center;">56</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯美式或四季春青茶或經典紅茶1杯(冰/熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=ac73cc2b-3c35-4f9a-8cfe-258552463469', '56')">查看</button></td>
-        </tr>
-        <tr id="row-57" style="background-color: #fef9c3;">
-            <td style="text-align:center;">57</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯美式或四季春青茶或經典紅茶1杯(冰/熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=ae96eae4-1df5-408c-8bd5-4896e06dd883', '57')">查看</button></td>
-        </tr>
-        <tr id="row-58" style="background-color: #fef9c3;">
-            <td style="text-align:center;">58</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯美式或四季春青茶或經典紅茶1杯(冰/熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=b1687a7f-51e1-49a5-869b-5005398fdbce', '58')">查看</button></td>
-        </tr>
-        <tr id="row-59" style="background-color: #fef9c3;">
-            <td style="text-align:center;">59</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯美式或四季春青茶或經典紅茶1杯(冰/熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=b590a07e-9db0-4410-9cdb-ef8b25ebddd1', '59')">查看</button></td>
-        </tr>
-        <tr id="row-60" style="background-color: #fef9c3;">
-            <td style="text-align:center;">60</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:中杯美式或四季春青茶或經典紅茶1杯(冰/熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=e5782cfc-aa0a-418a-95d0-a5b30f66c4c3', '60')">查看</button></td>
-        </tr>
-        <tr id="row-61" style="background-color: #ffe4e6;">
-            <td style="text-align:center;">61</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:大杯拿鐵1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=337d55c6-8a22-4cc1-99a3-37507698598f', '61')">查看</button></td>
-        </tr>
-        <tr id="row-62" style="background-color: #ffe4e6;">
-            <td style="text-align:center;">62</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:大杯拿鐵1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=680e1bf8-a093-44ba-be8c-ab90500e5cc0', '62')">查看</button></td>
-        </tr>
-        <tr id="row-63" style="background-color: #ffe4e6;">
-            <td style="text-align:center;">63</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:大杯拿鐵1杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=fb5a9130-7a0e-45a8-9ee3-ce6a17dfae4b', '63')">查看</button></td>
-        </tr>
-        <tr id="row-64" style="background-color: #f3e8ff;">
-            <td style="text-align:center;">64</td>
-            <td>
-                <span class="item-name">CITY CAFE虛擬提貨卡:大杯拿鐵2杯(冰熱不限)</span>
-                <span class="expiry-label">無期限</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=856db6aa-6d78-4ab6-9d5e-ec6c35ebe580', '64')">查看</button></td>
-        </tr>
-        <tr id="row-65" style="background-color: #ffedd5;">
-            <td style="text-align:center;">65</td>
-            <td>
-                <span class="item-name">未知品項</span>
-                <span class="expiry-label">未知日期</span>
-            </td>
-            <td><button class="btn-use" onclick="openV('https://txp.rs/viewvoucher.aspx?voucherguid=63d41147-312f-4ddd-8d85-7400f8cb5d23', '65')">查看</button></td>
-        </tr>
-                </tbody>
-            </table>
+    <div id="loginGate" style="position:fixed; top:0; left:0; width:100%; height:100%; background:#e60012; z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center; color:white; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, 'Microsoft JhengHei', sans-serif;">
+        <h2 style="margin-bottom:25px; font-size:24px; font-weight:bold; letter-spacing:1px;">🔒 PChome 電子票券中心 (親友特供版)</h2>
+        <div style="background:white; padding:35px 30px; border-radius:12px; display:flex; flex-direction:column; gap:18px; width:85%; max-width:320px; box-shadow:0 10px 25px rgba(0,0,0,0.25); box-sizing:border-box;">
+            <input type="password" id="gatePass" placeholder="請輸入家族專屬通關密碼" style="width:100%; padding:12px; font-size:16px; border:2px solid #ddd; border-radius:6px; outline:none; text-align:center; box-sizing:border-box; transition:border-color 0.2s;">
+            <button onclick="checkGatePass()" style="width:100%; background:#e60012; color:white; border:none; padding:12px; border-radius:6px; font-size:16px; font-weight:bold; cursor:pointer; box-sizing:border-box; transition:background 0.2s;">驗證登入</button>
         </div>
-        <div class="footer-info">目前可用： <span style="color:var(--primary); font-size: 1.8rem;">65</span> 張</div>
+        <p id="gateErr" style="color:#ffe3e3; margin-top:18px; font-size:14px; display:none; background:rgba(0,0,0,0.15); padding:6px 15px; border-radius:20px;">❌ 密碼錯誤，請重新確認！</p>
     </div>
-    <div id="modal" onclick="if(event.target==this)closeV()">
-        <div id="m-cont">
-            <div id="m-head"><button id="close-btn" onclick="closeV()">關閉視窗</button></div>
-            <iframe id="ifr" allow="geolocation; microphone; camera"></iframe>
+
+    <header class="l-header">
+        <div class="header-container">
+            <a href="#" class="logo">PChome 24h購物</a>
+            <span class="header-title">顧客中心</span>
+        </div>
+    </header>
+
+    <div class="c-breadcrumb">
+        <ul>
+            <li>首頁</li>
+            <li>顧客中心</li>
+            <li class="active">電子票券</li>
+        </ul>
+    </div>
+
+    <main class="l-main">
+        <div class="main-container">
+            
+            <div class="title-section">
+                <h1>電子票券 <span class="sync-time">同步時間：2026-07-11 21:15:12</span></h1>
+            </div>
+
+            <div class="c-tagList">
+                <button class="tag-btn active" data-type="all">全部</button>
+                <button class="tag-btn" data-type="barcode">商品券 (條碼)</button>
+                <button class="tag-btn" data-type="url">外鏈券 (網頁)</button>
+            </div>
+
+            <div class="search-filter-box">
+                <div class="input-wrapper">
+                    <input type="text" id="searchInput" placeholder="搜尋商品名稱、序號、或帳號..." autocomplete="off">
+                    <span class="search-icon">🔍</span>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="account collapsed">
+  <h2>0900132756（2 張）</h2>
+  <div class="card-grid">
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094666572011</div>
+        <div class="barcode" style="display:none;">1O303PBP</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094666572011" data-code2="1O303PBP">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094666572011">手動標記已使用</button>
+      </div>
+    </div>
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094663731208</div>
+        <div class="barcode" style="display:none;">EVEEEKOQ</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094663731208" data-code2="EVEEEKOQ">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094663731208">手動標記已使用</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="account collapsed">
+  <h2>0903308183（2 張）</h2>
+  <div class="card-grid">
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094665281192</div>
+        <div class="barcode" style="display:none;">U81W06I8</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094665281192" data-code2="U81W06I8">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094665281192">手動標記已使用</button>
+      </div>
+    </div>
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094663796138</div>
+        <div class="barcode" style="display:none;">XM1AOSKN</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094663796138" data-code2="XM1AOSKN">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094663796138">手動標記已使用</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="account collapsed">
+  <h2>0903350525（2 張）</h2>
+  <div class="card-grid">
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094665280955</div>
+        <div class="barcode" style="display:none;">4RPXNOPR</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094665280955" data-code2="4RPXNOPR">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094665280955">手動標記已使用</button>
+      </div>
+    </div>
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094663793666</div>
+        <div class="barcode" style="display:none;">GGJE1CCJ</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094663793666" data-code2="GGJE1CCJ">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094663793666">手動標記已使用</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="account collapsed">
+  <h2>0903870159（1 張）</h2>
+  <div class="card-grid">
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094665280631</div>
+        <div class="barcode" style="display:none;">G3EN6DYL</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094665280631" data-code2="G3EN6DYL">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094665280631">手動標記已使用</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="account collapsed">
+  <h2>0903969465（2 張）</h2>
+  <div class="card-grid">
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094667926808</div>
+        <div class="barcode" style="display:none;">JMRRPPTR</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094667926808" data-code2="JMRRPPTR">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094667926808">手動標記已使用</button>
+      </div>
+    </div>
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094663730420</div>
+        <div class="barcode" style="display:none;">HSHM7IUB</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094663730420" data-code2="HSHM7IUB">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094663730420">手動標記已使用</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="account collapsed">
+  <h2>0906087810（2 張）</h2>
+  <div class="card-grid">
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094667241741</div>
+        <div class="barcode" style="display:none;">SM9IT1IV</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094667241741" data-code2="SM9IT1IV">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094667241741">手動標記已使用</button>
+      </div>
+    </div>
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094663735224</div>
+        <div class="barcode" style="display:none;">OB6ORJ35</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094663735224" data-code2="OB6ORJ35">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094663735224">手動標記已使用</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="account collapsed">
+  <h2>0909681595（2 張）</h2>
+  <div class="card-grid">
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094667926916</div>
+        <div class="barcode" style="display:none;">FUHHJHOW</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094667926916" data-code2="FUHHJHOW">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094667926916">手動標記已使用</button>
+      </div>
+    </div>
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094663731748</div>
+        <div class="barcode" style="display:none;">19MBHT5N</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094663731748" data-code2="19MBHT5N">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094663731748">手動標記已使用</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="account collapsed">
+  <h2>0911921738（2 張）</h2>
+  <div class="card-grid">
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094665280739</div>
+        <div class="barcode" style="display:none;">09IVROW0</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094665280739" data-code2="09IVROW0">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094665280739">手動標記已使用</button>
+      </div>
+    </div>
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094663734868</div>
+        <div class="barcode" style="display:none;">FIEPGLVC</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094663734868" data-code2="FIEPGLVC">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094663734868">手動標記已使用</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="account collapsed">
+  <h2>0916334169（2 張）</h2>
+  <div class="card-grid">
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094665280307</div>
+        <div class="barcode" style="display:none;">82NY28K5</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094665280307" data-code2="82NY28K5">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094665280307">手動標記已使用</button>
+      </div>
+    </div>
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094663735332</div>
+        <div class="barcode" style="display:none;">H6UTM0D6</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094663735332" data-code2="H6UTM0D6">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094663735332">手動標記已使用</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="account collapsed">
+  <h2>0933665452（2 張）</h2>
+  <div class="card-grid">
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094664835019</div>
+        <div class="barcode" style="display:none;">EILP3R3M</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094664835019" data-code2="EILP3R3M">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094664835019">手動標記已使用</button>
+      </div>
+    </div>
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094663748995</div>
+        <div class="barcode" style="display:none;">4CEORKSI</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094663748995" data-code2="4CEORKSI">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094663748995">手動標記已使用</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="account collapsed">
+  <h2>0952218216（8 張）</h2>
+  <div class="card-grid">
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094665935138</div>
+        <div class="barcode" style="display:none;">00N48HJC</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094665935138" data-code2="00N48HJC">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094665935138">手動標記已使用</button>
+      </div>
+    </div>
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094663715758</div>
+        <div class="barcode" style="display:none;">CL6RASBN</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094663715758" data-code2="CL6RASBN">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094663715758">手動標記已使用</button>
+      </div>
+    </div>
+    <div class="card expire-normal">
+      <div class="name">迪卡儂3000元即享券(餘額型)</div>
+      <div class="expire">迪卡儂3000元即享券(餘額型)</div>
+      <div class="url">
+        <a href="https://txp.rs/viewvoucher.aspx?voucherguid=be75d48a-f6b7-4f27-9883-f846bdf64010" target="_blank">👉 開啟外鏈券</a>
+      </div>
+    </div>
+    <div class="card expire-normal">
+      <div class="name">【全台多點】家樂福電子禮券$5000(餘額型)_電子憑證</div>
+      <div class="expire">【全台多點】康達盛通電子禮券$5000(餘額型)_電子憑證<br>本憑證如有包含餐點，其豬肉及豬可食部位原料之原產地標示請依現場公告為準</div>
+      <div class="url">
+        <a href="https://www.payeasy.com.tw/Electronic/coupon?id=ifYZrqfuEV7f" target="_blank">👉 開啟外鏈券</a>
+      </div>
+    </div>
+    <div class="card expire-normal">
+      <div class="name">【享樂券】爭鮮餐飲1000元通用券_電子憑證</div>
+      <div class="expire">【享樂券】爭鮮餐飲1000元通用券_電子憑證<br>本憑證如有包含餐點，其豬肉及豬可食部位原料之原產地標示請依現場公告為準</div>
+      <div class="url">
+        <a href="https://www.payeasy.com.tw/Electronic/coupon?id=Mf2UzmNFZzA3" target="_blank">👉 開啟外鏈券</a>
+      </div>
+    </div>
+    <div class="card expire-normal">
+      <div class="name">【享樂券】爭鮮餐飲1000元通用券_電子憑證</div>
+      <div class="expire">【享樂券】爭鮮餐飲1000元通用券_電子憑證<br>本憑證如有包含餐點，其豬肉及豬可食部位原料之原產地標示請依現場公告為準</div>
+      <div class="url">
+        <a href="https://www.payeasy.com.tw/Electronic/coupon?id=yeyeYvzQVZ3i" target="_blank">👉 開啟外鏈券</a>
+      </div>
+    </div>
+    <div class="card expire-normal">
+      <div class="name">85度C 100元即享券(餘額型)</div>
+      <div class="expire">【85度C】100元即享券(餘額型)</div>
+      <div class="url">
+        <a href="https://txp.rs/viewvoucher.aspx?voucherguid=5ab872ef-a197-47ee-9d9b-52e1dbc04149" target="_blank">👉 開啟外鏈券</a>
+      </div>
+    </div>
+    <div class="card expire-normal">
+      <div class="name">85度C 100元即享券(餘額型)</div>
+      <div class="expire">【85度C】100元即享券(餘額型)</div>
+      <div class="url">
+        <a href="https://txp.rs/viewvoucher.aspx?voucherguid=4eb8490e-1a95-48ba-a26a-948db2ccb33a" target="_blank">👉 開啟外鏈券</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="account collapsed">
+  <h2>0960633454（2 張）</h2>
+  <div class="card-grid">
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094664832223</div>
+        <div class="barcode" style="display:none;">SAWVJTWI</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094664832223" data-code2="SAWVJTWI">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094664832223">手動標記已使用</button>
+      </div>
+    </div>
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094663732968</div>
+        <div class="barcode" style="display:none;">51AWSO74</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094663732968" data-code2="51AWSO74">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094663732968">手動標記已使用</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="account collapsed">
+  <h2>0965186198（2 張）</h2>
+  <div class="card-grid">
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094665936790</div>
+        <div class="barcode" style="display:none;">1GSIWHXI</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094665936790" data-code2="1GSIWHXI">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094665936790">手動標記已使用</button>
+      </div>
+    </div>
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094663738020</div>
+        <div class="barcode" style="display:none;">SVX3A50P</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094663738020" data-code2="SVX3A50P">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094663738020">手動標記已使用</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="account collapsed">
+  <h2>0966824396（2 張）</h2>
+  <div class="card-grid">
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094665936466</div>
+        <div class="barcode" style="display:none;">RU1R3877</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094665936466" data-code2="RU1R3877">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094665936466">手動標記已使用</button>
+      </div>
+    </div>
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094663735980</div>
+        <div class="barcode" style="display:none;">5A567045</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094663735980" data-code2="5A567045">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094663735980">手動標記已使用</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="account collapsed">
+  <h2>0971260012（2 張）</h2>
+  <div class="card-grid">
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094667242194</div>
+        <div class="barcode" style="display:none;">H9LFFPJH</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094667242194" data-code2="H9LFFPJH">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094667242194">手動標記已使用</button>
+      </div>
+    </div>
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094663740207</div>
+        <div class="barcode" style="display:none;">6V6P9FKY</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094663740207" data-code2="6V6P9FKY">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094663740207">手動標記已使用</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="account collapsed">
+  <h2>0989721451（2 張）</h2>
+  <div class="card-grid">
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094665280523</div>
+        <div class="barcode" style="display:none;">VW659L4L</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094665280523" data-code2="VW659L4L">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094665280523">手動標記已使用</button>
+      </div>
+    </div>
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094663723861</div>
+        <div class="barcode" style="display:none;">0H6QYUJ9</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094663723861" data-code2="0H6QYUJ9">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094663723861">手動標記已使用</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="account collapsed">
+  <h2>0989728779（2 張）</h2>
+  <div class="card-grid">
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094667242853</div>
+        <div class="barcode" style="display:none;">4V7LGRRY</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094667242853" data-code2="4V7LGRRY">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094667242853">手動標記已使用</button>
+      </div>
+    </div>
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094663736552</div>
+        <div class="barcode" style="display:none;">JDO8JPFR</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094663736552" data-code2="JDO8JPFR">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094663736552">手動標記已使用</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="account collapsed">
+  <h2>0989809544（2 張）</h2>
+  <div class="card-grid">
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094664834987</div>
+        <div class="barcode" style="display:none;">CB76ICX9</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094664834987" data-code2="CB76ICX9">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094664834987">手動標記已使用</button>
+      </div>
+    </div>
+    <div class="card expire-normal">
+      <div class="name">茶葉蛋1顆</div>
+      <div class="expire">使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。</div>
+      <div class="barcode-box">
+        <div class="barcode" style="display:none;">7500094663731964</div>
+        <div class="barcode" style="display:none;">05KTFR2D</div>
+        <button class="btn-redeem" data-name="茶葉蛋1顆" data-expire="使用期限：2026年12月1日止。<br>兌換商品：茶葉蛋1顆。 <br>本憑證兌換之商品，其商品原料請依店家現場公告或商品包裝上標示的配方成分表為準。" data-code1="7500094663731964" data-code2="05KTFR2D">🎁 立即兌換</button>
+        <button class="btn-mark-used" data-bc1="7500094663731964">手動標記已使用</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <div id="barcodeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-back">❮ 商品兌換</span>
+                <span class="modal-close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="modal-prod-info">
+                    <div class="modal-prod-name" id="modalProdName">商品名稱</div>
+                    <div class="modal-prod-meta" id="modalProdExpire">使用期限：-</div>
+                    <div class="modal-prod-meta" id="modalProdOrder">訂單編號：-</div>
+                </div>
+                
+                <div class="barcode-render-zone">
+                    <svg id="barcode1"></svg>
+                    <div class="barcode-text-sub" id="barcodeText1"></div>
+                    <svg id="barcode2"></svg>
+                    <div class="barcode-text-sub" id="barcodeText2"></div>
+                </div>
+
+                <div class="modal-notice">
+                    <h3>方案內容</h3>
+                    <p id="modalNoticeContent">方案內容加載中...</p>
+                </div>
+            </div>
         </div>
     </div>
-</body></html>
+
+    <footer class="l-footer">
+        網路家庭國際資訊股份有限公司 版權所有 轉載必究
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
